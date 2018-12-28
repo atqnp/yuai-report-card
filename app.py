@@ -8,11 +8,14 @@ from oauth2client.service_account import ServiceAccountCredentials
 scope = ['https://spreadsheets.google.com/feeds',
 		 'https://www.googleapis.com/auth/drive']
 
+SHEET_PRIVATE_KEY = os.environ['SHEET_PRIVATE_KEY']
+SHEET_PRIVATE_KEY = SHEET_PRIVATE_KEY.replace('\\n', '\n')
+
 credential = {
                 "type": "service_account",
                 "project_id": os.environ['SHEET_PROJECT_ID'],
                 "private_key_id": os.environ['SHEET_PRIVATE_KEY_ID'],
-                "private_key": os.environ['SHEET_PRIVATE_KEY'],
+                "private_key": SHEET_PRIVATE_KEY,
                 "client_email": os.environ['SHEET_CLIENT_EMAIL'],
                 "client_id": os.environ['SHEET_CLIENT_ID'],
                 "auth_uri": "https://accounts.google.com/o/oauth2/auth",
@@ -36,10 +39,11 @@ app.layout = html.Div([
 	dcc.Markdown('''
 		Click this [LINK](https://docs.google.com/spreadsheets/d/1OUvxRYf2UnIqz_DHCu-SL3Q7b0ghADSEzC3wz5gVxj8/edit#gid=1819952105) to go the source Google Spreadsheet file.
 		'''),
-	dcc.Dropdown(
-		id='dropdown',
-		options=[{'label':i,'value':i} for i in col_1],
-	),
+	# dcc.Dropdown(
+	# 	id='dropdown',
+	# 	options=[{'label':i,'value':i} for i in col_1],
+	# 	placeholder="Select",
+	# ),
 	html.Div(id='display-value')
 ])
 
