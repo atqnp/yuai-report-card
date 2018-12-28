@@ -49,7 +49,5 @@ app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"
 def display_value(value):
 	return 'You have selected "{}"'.format(value)
 
-def return_value()
-
 if __name__ == '__main__':
 	app.run_server(debug=True)
