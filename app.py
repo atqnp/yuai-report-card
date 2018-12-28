@@ -35,7 +35,7 @@ app.layout = html.Div([
 	html.H2('YUAI International Islamic School - Progress Report Card'),
 	dcc.Markdown('''
 		Click this [LINK](https://docs.google.com/spreadsheets/d/1OUvxRYf2UnIqz_DHCu-SL3Q7b0ghADSEzC3wz5gVxj8/edit#gid=1819952105) to go the source Google Spreadsheet file.
-		''')
+		'''),
 	dcc.Dropdown(
 		id='dropdown',
 		options=[{'label':i,'value':i} for i in col_1],
