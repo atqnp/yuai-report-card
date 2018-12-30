@@ -1,6 +1,7 @@
 import os
 import dash
 import gspread
+import pandas as pd
 import dash_core_components as dcc
 import dash_html_components as html
 from oauth2client.service_account import ServiceAccountCredentials
@@ -29,24 +30,60 @@ credentials = ServiceAccountCredentials.from_json_keyfile_dict(credential,scope)
 file = gspread.authorize(credentials)
 sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
 wks = sheet.worksheet("master")
-col_1 = wks.col_values(1)
+
+
+def generate_table(dataframe,max_rows = 10)
+	return html.Table(
+		#Header
+		[html.Tr([html.Th(col) for col in dataframe.columns])] +
+		#Body
+		[html.Tr([
+			html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
+		]) for i in range(min(len(dataframe),max_rows))]
+	)
+
+select_opt = {'Primary' : list(range(1,7)),
+			'Secondary' : list(range(7,10))}
+
+select_level = list(select_opt.keys())
+select_year = select_opt[select_level[0]]
 
 app = dash.Dash(__name__)
 server = app.server
 
-app.layout = html.Div([
-	html.H2('YUAI International Islamic School - Progress Report Card'),
-	dcc.Dropdown(
-	 	id='dropdown',
-	 	options=[{'label':i,'value':i} for i in col_1],
-		value='Name'
-	),
-	html.Div(id='display-value')
-])
+app.layout = html.Div(
+	[
+		html.H2('YUAI International Islamic School - Progress Report Card'),
+		html.Div([
+		dcc.Dropdown(
+			id='level-dropdown',
+			options=[{'label':i,'value':i} for i in select_level],
+			placeholder="Select level",
+			),
+		],
+		),
+		html.Div([
+		dcc.Dropdown(
+			id='year-dropdown',
+			),
+			],	
+		),
+		html.Hr(),
+		html.Div(id='display-value')
+	]
+)
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
-@app.callback(dash.dependencies.Output('display-value','children'), [dash.dependencies.Input('dropdown','value')])
+@app.callback(
+	dash.dependencies.Output('year-dropdown','options'), 
+	[dash.dependencies.Input('level-dropdown','value')])
+def update_dropdown(level):
+	return [{'label':i,'value':i} for i in select_opt[level]]
+
+@app.callback(
+	dash.dependencies.Output('display-value','children'), 
+	[dash.dependencies.Input('opt-dropdown','value')])
 def display_value(value):
 	return 'You have selected "{}"'.format(value)
 
