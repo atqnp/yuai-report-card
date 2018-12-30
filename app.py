@@ -71,9 +71,10 @@ def update_dropdown(level):
 
 @app.callback(
 	dash.dependencies.Output('display-value','children'), 
-	[dash.dependencies.Input('opt-dropdown','value')])
-def display_value(value):
-	return 'You have selected "{}"'.format(value)
+	[dash.dependencies.Input('level-dropdown','value'),
+	dash.dependencies.Input('year-dropdown','value')])
+def display_value(selected_level,selected_year):
+	return 'You have selected {} {}'.format(selected_level,selected_year)
 
 if __name__ == '__main__':
 	app.run_server(debug=True)
