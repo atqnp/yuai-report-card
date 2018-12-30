@@ -31,19 +31,7 @@ file = gspread.authorize(credentials)
 sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
 wks = sheet.worksheet("master")
 
-
-def generate_table(dataframe,max_rows = 10)
-	return html.Table(
-		#Header
-		[html.Tr([html.Th(col) for col in dataframe.columns])] +
-		#Body
-		[html.Tr([
-			html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
-		]) for i in range(min(len(dataframe),max_rows))]
-	)
-
-select_opt = {'Primary' : list(range(1,7)),
-			'Secondary' : list(range(7,10))}
+select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 
 select_level = list(select_opt.keys())
 select_year = select_opt[select_level[0]]
