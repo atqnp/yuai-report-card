@@ -27,12 +27,13 @@ credential = {
 
 credentials = ServiceAccountCredentials.from_json_keyfile_dict(credential,scope)
 
+#DataFrame spreadsheet
 file = gspread.authorize(credentials)
 sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
 wks = sheet.worksheet("master")
+df = pd.DataFrame(wks.get_all_records())
 
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
-
 select_level = list(select_opt.keys())
 select_year = select_opt[select_level[0]]
 
@@ -53,6 +54,14 @@ app.layout = html.Div(
 		html.Div([
 		dcc.Dropdown(
 			id='year-dropdown',
+			placeholder="Select year"
+			),
+			],	
+		),
+		html.Div([
+		dcc.Dropdown(
+			id='name-dropdown',
+			placeholder="Select name"
 			),
 			],	
 		),
@@ -66,15 +75,24 @@ app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"
 @app.callback(
 	dash.dependencies.Output('year-dropdown','options'), 
 	[dash.dependencies.Input('level-dropdown','value')])
-def update_dropdown(level):
+def update_dropdown_level(level):
 	return [{'label':i,'value':i} for i in select_opt[level]]
+
+@app.callback(
+	dash.dependencies.Output('name-dropdown','options'), 
+	[dash.dependencies.Input('level-dropdown','value'),
+	dash.dependencies.Input('year-dropdown','value')])
+def update_dropdown_name(level,year):
+	select_df = df[(df.Level.isin([level])) & (df.Year.isin([year]))]
+	return [{'label':i,'value':i} for i in list(select_df['Name'])]
 
 @app.callback(
 	dash.dependencies.Output('display-value','children'), 
 	[dash.dependencies.Input('level-dropdown','value'),
-	dash.dependencies.Input('year-dropdown','value')])
-def display_value(selected_level,selected_year):
-	return 'You have selected {} {}'.format(selected_level,selected_year)
+	dash.dependencies.Input('year-dropdown','value'),
+	dash.dependencies.Input('name-dropdown','value')])
+def display_value(s_level,s_year, s_name):
+	return 'You have selected {} {} {}'.format(s_level,s_year, s_name)
 
 if __name__ == '__main__':
 	app.run_server(debug=True)
