@@ -1,9 +1,11 @@
 import os
 import dash
+import dash_table
 import gspread
 import pandas as pd
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output
 from oauth2client.service_account import ServiceAccountCredentials
 
 scope = ['https://spreadsheets.google.com/feeds',
@@ -37,8 +39,43 @@ select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
 select_year = select_opt[select_level[0]]
 
+#List of subject
+subject = ['TJ','TF','IS','AR','EN','JP','MT','SC','PE','LS','IT','SS','GE','ART']
+sub_grade = ['{}_grade'.format(sub) for sub in subject]
+sub_marks = ['{}_marks'.format(sub) for sub in subject]
+sub_com = ['{}_comments'.format(sub) for sub in subject]
+
+
 app = dash.Dash(__name__)
 server = app.server
+
+def grades_table(dataframe):
+	return html.Table(
+        # Header
+        [html.Tr([html.Th(col) for col in ['Component','Grade', 'Marks']])] +
+
+        # Body
+        [html.Tr(
+        	[html.Td(grade.strip('_grade'))] +
+        	[html.Td(dataframe[grade])] +
+        	[html.Td(dataframe[marks])]
+        	) for grade,marks in zip(sub_grade,sub_marks)
+        ]
+        )
+
+def comments_table(dataframe):
+	return html.Table(
+        # Header
+        [html.Tr([html.Th(col) for col in ['Component','Competency and Accomplishment']])] +
+
+        # Body
+        [html.Tr(
+        	[html.Td(sub.strip('_comments'))] +
+        	[html.Td([html.P(value) for index, value in dataframe[sub].str.split('\n',expand=True).items()])]
+        	) for sub in sub_com
+        ]
+        )
+
 
 app.layout = html.Div(
 	[
@@ -49,50 +86,65 @@ app.layout = html.Div(
 			options=[{'label':i,'value':i} for i in select_level],
 			placeholder="Select level",
 			),
-		],
-		),
+		],),
 		html.Div([
 		dcc.Dropdown(
 			id='year-dropdown',
 			placeholder="Select year"
 			),
-			],	
-		),
+		],),
 		html.Div([
 		dcc.Dropdown(
 			id='name-dropdown',
 			placeholder="Select name"
 			),
-			],	
-		),
+		],),
 		html.Hr(),
-		html.Div(id='display-value')
+		html.Div(id='display-value'),
+		html.Hr(),
+		html.Div(id='display-grade'),
+		html.Hr(),
+		html.Div(id='display-comments')
 	]
 )
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
 @app.callback(
-	dash.dependencies.Output('year-dropdown','options'), 
-	[dash.dependencies.Input('level-dropdown','value')])
+	Output('year-dropdown','options'), 
+	[Input('level-dropdown','value')])
 def update_dropdown_level(level):
 	return [{'label':i,'value':i} for i in select_opt[level]]
 
 @app.callback(
-	dash.dependencies.Output('name-dropdown','options'), 
-	[dash.dependencies.Input('level-dropdown','value'),
-	dash.dependencies.Input('year-dropdown','value')])
+	Output('name-dropdown','options'), 
+	[Input('level-dropdown','value'), 
+	Input('year-dropdown','value')])
 def update_dropdown_name(level,year):
 	select_df = df[(df.Level.isin([level])) & (df.Year.isin([year]))]
 	return [{'label':i,'value':i} for i in list(select_df['Name'])]
 
 @app.callback(
-	dash.dependencies.Output('display-value','children'), 
-	[dash.dependencies.Input('level-dropdown','value'),
-	dash.dependencies.Input('year-dropdown','value'),
-	dash.dependencies.Input('name-dropdown','value')])
+	Output('display-value','children'), 
+	[Input('level-dropdown','value'),
+	Input('year-dropdown','value'),
+	Input('name-dropdown','value')])
 def display_value(s_level,s_year, s_name):
-	return 'You have selected {} {} {}'.format(s_level,s_year, s_name)
+	return html.P('You have selected:'), html.P('{} Year {} - {}'.format(s_level,s_year, s_name))
+
+@app.callback(
+	Output('display-grade','children'),
+	[Input('name-dropdown','value')])
+def display_report(name):
+	dfi = df[df.Name.isin([name])]
+	return grades_table(dfi)
+
+@app.callback(
+	Output('display-comments','children'),
+	[Input('name-dropdown','value')])
+def display_report(name):
+	dfi = df[df.Name.isin([name])]
+	return comments_table(dfi)
 
 if __name__ == '__main__':
 	app.run_server(debug=True)
