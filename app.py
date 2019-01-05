@@ -77,7 +77,10 @@ def comments_table(dataframe):
         )
 
 
-app.layout = html.Div(
+
+
+def serve_layout():
+	return html.Div(
 	[
 		html.H2('YUAI International Islamic School - Progress Report Card'),
 		html.Div([
@@ -106,7 +109,9 @@ app.layout = html.Div(
 		html.Hr(),
 		html.Div(id='display-comments')
 	]
-)
+	)
+
+app.layout = serve_layout()
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
