@@ -13,25 +13,9 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 scope = ['https://spreadsheets.google.com/feeds',
 		 'https://www.googleapis.com/auth/drive']
 
-SHEET_PRIVATE_KEY = os.environ['SHEET_PRIVATE_KEY']
-SHEET_PRIVATE_KEY = SHEET_PRIVATE_KEY.replace('\\n', '\n')
+credentials = ServiceAccountCredentials.from_json_keyfile_name('gspreadsheet-yuai-638e20a7f7b0.json',scope)
 
-credential = {
-                "type": "service_account",
-                "project_id": os.environ['SHEET_PROJECT_ID'],
-                "private_key_id": os.environ['SHEET_PRIVATE_KEY_ID'],
-                "private_key": SHEET_PRIVATE_KEY,
-                "client_email": os.environ['SHEET_CLIENT_EMAIL'],
-                "client_id": os.environ['SHEET_CLIENT_ID'],
-                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                "token_uri": "https://oauth2.googleapis.com/token",
-                "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                "client_x509_cert_url":  os.environ['SHEET_CLIENT_X509_CERT_URL']
-             }
-
-credentials = ServiceAccountCredentials.from_json_keyfile_dict(credential,scope)
-
-UPDATE_INTERVAL = 5
+UPDATE_INTERVAL = 15
 
 #DataFrame spreadsheet
 def get_data():
@@ -41,6 +25,7 @@ def get_data():
 	sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
 	wks = sheet.worksheet("master")
 	df = pd.DataFrame(wks.get_all_records())
+
 
 def get_new_update(period=UPDATE_INTERVAL):
 	while True:
@@ -57,7 +42,28 @@ sub_grade = ['{}_grade'.format(sub) for sub in subject]
 sub_marks = ['{}_marks'.format(sub) for sub in subject]
 sub_com = ['{}_comments'.format(sub) for sub in subject]
 
+
 app = dash.Dash(__name__)
+
+app.index_string = '''
+<!DOCTYPE html>
+<html>
+    <head>
+        {%metas%}
+        <title>YUAI - Report Card</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        <h3>YUAI International Islamic School - Progress Report Card</h3>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+        </footer>
+    </body>
+</html>
+'''
 
 server = app.server
 get_data()
@@ -92,7 +98,7 @@ def comments_table(dataframe):
 def serve_layout():
 	return html.Div(
 		[
-			html.H2('YUAI International Islamic School - Progress Report Card'),
+			#html.H2('YUAI International Islamic School - Progress Report Card'),
 			html.Div([
 			html.Div(id='refresh-data'),
 			dcc.Dropdown(
@@ -163,4 +169,3 @@ def display_report(name):
 
 if __name__ == '__main__':
 	app.run_server(debug=True)
-
