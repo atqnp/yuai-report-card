@@ -1,3 +1,4 @@
+import time
 import os
 import dash
 import dash_table
@@ -7,6 +8,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from oauth2client.service_account import ServiceAccountCredentials
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 scope = ['https://spreadsheets.google.com/feeds',
 		 'https://www.googleapis.com/auth/drive']
@@ -29,11 +31,21 @@ credential = {
 
 credentials = ServiceAccountCredentials.from_json_keyfile_dict(credential,scope)
 
+UPDATE_INTERVAL = 5
+
 #DataFrame spreadsheet
-file = gspread.authorize(credentials)
-sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
-wks = sheet.worksheet("master")
-df = pd.DataFrame(wks.get_all_records())
+def get_data():
+	#updates the data
+	global df
+	file = gspread.authorize(credentials)
+	sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
+	wks = sheet.worksheet("master")
+	df = pd.DataFrame(wks.get_all_records())
+
+def get_new_update(period=UPDATE_INTERVAL):
+	while True:
+		get_data()
+		time.sleep(period)
 
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
@@ -45,9 +57,10 @@ sub_grade = ['{}_grade'.format(sub) for sub in subject]
 sub_marks = ['{}_marks'.format(sub) for sub in subject]
 sub_com = ['{}_comments'.format(sub) for sub in subject]
 
-
 app = dash.Dash(__name__)
+
 server = app.server
+get_data()
 
 def grades_table(dataframe):
 	return html.Table(
@@ -76,42 +89,39 @@ def comments_table(dataframe):
         ]
         )
 
-
-
-
 def serve_layout():
 	return html.Div(
-	[
-		html.H2('YUAI International Islamic School - Progress Report Card'),
-		html.Div([
-		dcc.Dropdown(
-			id='level-dropdown',
-			options=[{'label':i,'value':i} for i in select_level],
-			placeholder="Select level",
-			),
-		],),
-		html.Div([
-		dcc.Dropdown(
-			id='year-dropdown',
-			placeholder="Select year"
-			),
-		],),
-		html.Div([
-		dcc.Dropdown(
-			id='name-dropdown',
-			placeholder="Select name"
-			),
-		],),
-		html.Hr(),
-		html.Div(id='display-value'),
-		html.Hr(),
-		html.Div(id='display-grade'),
-		html.Hr(),
-		html.Div(id='display-comments')
-	]
+		[
+			html.H2('YUAI International Islamic School - Progress Report Card'),
+			html.Div([
+			html.Div(id='refresh-data'),
+			dcc.Dropdown(
+				id='level-dropdown',
+				options=[{'label':i,'value':i} for i in select_level],
+				placeholder="Select level",
+				),
+			dcc.Dropdown(
+				id='year-dropdown',
+				placeholder="Select year"
+				),
+			dcc.Dropdown(
+				id='name-dropdown',
+				placeholder="Select name"
+				),
+			]),
+			html.Hr(),
+			html.Div(id='display-value'),
+			html.Hr(),
+			html.Div(id='display-grade'),
+			html.Hr(),
+			html.Div(id='display-comments')
+		]
 	)
 
-app.layout = serve_layout()
+app.layout = serve_layout
+
+executor = ThreadPoolExecutor(max_workers=1)
+executor.submit(get_new_update)
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
@@ -153,3 +163,4 @@ def display_report(name):
 
 if __name__ == '__main__':
 	app.run_server(debug=True)
+
