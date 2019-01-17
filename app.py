@@ -4,11 +4,13 @@ import dash
 import dash_table
 import gspread
 import pandas as pd
+import appfunction
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from oauth2client.service_account import ServiceAccountCredentials
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+from apps import report, submit1, submit2, submit3, submit4, submit5
 
 scope = ['https://spreadsheets.google.com/feeds',
 		 'https://www.googleapis.com/auth/drive']
@@ -31,7 +33,7 @@ credential = {
 
 credentials = ServiceAccountCredentials.from_json_keyfile_dict(credential,scope)
 
-UPDATE_INTERVAL = 15
+UPDATE_INTERVAL = 30
 
 #DataFrame spreadsheet
 def get_data():
@@ -58,7 +60,6 @@ sub_grade = ['{}_grade'.format(sub) for sub in subject]
 sub_marks = ['{}_marks'.format(sub) for sub in subject]
 sub_com = ['{}_comments'.format(sub) for sub in subject]
 
-
 app = dash.Dash(__name__)
 
 app.index_string = '''
@@ -71,7 +72,6 @@ app.index_string = '''
         {%css%}
     </head>
     <body>
-        <h3>YUAI International Islamic School - Progress Report Card</h3>
         {%app_entry%}
         <footer>
             {%config%}
@@ -81,71 +81,46 @@ app.index_string = '''
 </html>
 '''
 
+app.config.suppress_callback_exceptions = True
 server = app.server
 get_data()
 
-def grades_table(dataframe):
-	return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in ['Component','Grade', 'Marks']])] +
-
-        # Body
-        [html.Tr(
-        	[html.Td(grade.strip('_grade'))] +
-        	[html.Td(dataframe[grade])] +
-        	[html.Td(dataframe[marks])]
-        	) for grade,marks in zip(sub_grade,sub_marks)
-        ]
-        )
-
-def comments_table(dataframe):
-	return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in ['Component','Competency and Accomplishment']])] +
-
-        # Body
-        [html.Tr(
-        	[html.Td(sub.strip('_comments'))] +
-        	[html.Td([html.P(value) for index, value in dataframe[sub].str.split('\n',expand=True).items()])]
-        	) for sub in sub_com
-        ]
-        )
-
 def serve_layout():
-	return html.Div(
-		[
-			#html.H2('YUAI International Islamic School - Progress Report Card'),
-			html.Div([
-			html.Div(id='refresh-data'),
-			dcc.Dropdown(
-				id='level-dropdown',
-				options=[{'label':i,'value':i} for i in select_level],
-				placeholder="Select level",
-				),
-			dcc.Dropdown(
-				id='year-dropdown',
-				placeholder="Select year"
-				),
-			dcc.Dropdown(
-				id='name-dropdown',
-				placeholder="Select name"
-				),
+	return html.Div([
+		html.H3('YUAI International Islamic School - Progress Report Card'),
+		dcc.Tabs(id='tabs-id', value='tab-report',children=[
+			dcc.Tab(label='Full Report', value='tab-report'),
+			dcc.Tab(label='Submit Marks and Grade (Academics)', value='tab-submit1'),
+			dcc.Tab(label='Submit Notes (Academics)', value='tab-submit2'),
+			dcc.Tab(label='Submit Co-curricular and Extra-curricular (Grade)', value='tab-submit3'),
+			dcc.Tab(label='Submit Co-curricular and Extra-curricular (Comments)', value='tab-submit4'),
+			dcc.Tab(label='Submit Behaviour/Affectiveness', value='tab-submit5'),
 			]),
-			html.Hr(),
-			html.Div(id='display-value'),
-			html.Hr(),
-			html.Div(id='display-grade'),
-			html.Hr(),
-			html.Div(id='display-comments')
-		]
-	)
-
-app.layout = serve_layout
+		html.Div(id='tab-contents')
+		])
 
 executor = ThreadPoolExecutor(max_workers=1)
 executor.submit(get_new_update)
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
+
+app.layout = serve_layout
+
+@app.callback(Output('tab-contents','children'),
+			[Input('tabs-id','value')])
+def render_content(tab):
+	if tab == 'tab-report':
+		return report.layout
+	elif tab == 'tab-submit1':
+		return submit1.layout
+	elif tab == 'tab-submit2':
+		return submit2.layout
+	elif tab == 'tab-submit3':
+		return submit3.layout
+	elif tab == 'tab-submit4':
+		return submit4.layout
+	elif tab == 'tab-submit5':
+		return submit5.layout
 
 @app.callback(
 	Output('year-dropdown','options'), 
@@ -172,16 +147,51 @@ def display_value(s_level,s_year, s_name):
 @app.callback(
 	Output('display-grade','children'),
 	[Input('name-dropdown','value')])
-def display_report(name):
+def display_grade(name):
 	dfi = df[df.Name.isin([name])]
-	return grades_table(dfi)
+	return appfunction.grades_table(dfi)
 
 @app.callback(
 	Output('display-comments','children'),
 	[Input('name-dropdown','value')])
-def display_report(name):
+def display_comments(name):
 	dfi = df[df.Name.isin([name])]
-	return comments_table(dfi)
+	return appfunction.comments_table(dfi)
+
+@app.callback(
+	Output('display-cc-grade','children'),
+	[Input('name-dropdown','value')])
+def display_grade_cc(name):
+	dfi = df[df.Name.isin([name])]
+	return appfunction.co_table(dfi)
+
+@app.callback(
+	Output('display-ex-grade','children'),
+	[Input('name-dropdown','value')])
+def display_grade_ex(name):
+	dfi = df[df.Name.isin([name])]
+	return appfunction.extra_table(dfi)
+
+@app.callback(
+	Output('display-cc-comments','children'),
+	[Input('name-dropdown','value')])
+def display_comments_cc(name):
+	dfi = df[df.Name.isin([name])]
+	return appfunction.co_comments(dfi)
+
+@app.callback(
+	Output('display-ex-comments','children'),
+	[Input('name-dropdown','value')])
+def display_comments_ex(name):
+	dfi = df[df.Name.isin([name])]
+	return appfunction.extra_comments(dfi)
+
+@app.callback(
+	Output('display-attitude','children'),
+	[Input('name-dropdown','value')])
+def display_attitude(name):
+	dfi = df[df.Name.isin([name])]
+	return appfunction.attitude(dfi)
 
 if __name__ == '__main__':
 	app.run_server(debug=True)
