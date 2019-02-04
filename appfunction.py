@@ -7,7 +7,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
-select_year = select_opt[select_level[0]]
 
 #List of subject
 subject = {'TJ':'Tajweed',
