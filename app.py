@@ -1,13 +1,12 @@
 import time
 import os
 import dash
-import dash_table
 import gspread
 import pandas as pd
 import appfunction
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from oauth2client.service_account import ServiceAccountCredentials
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from apps import report, submit1, submit2, submit3, submit4, submit5
@@ -37,28 +36,46 @@ UPDATE_INTERVAL = 30
 
 #DataFrame spreadsheet
 def get_data():
-	#updates the data
-	global df
-	file = gspread.authorize(credentials)
-	sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
-	wks = sheet.worksheet("master")
-	df = pd.DataFrame(wks.get_all_records())
+    #updates the data
+    global df
+    file = gspread.authorize(credentials)
+    sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
+    wks = sheet.worksheet("master")
+    df = pd.DataFrame(wks.get_all_records())
 
 
 def get_new_update(period=UPDATE_INTERVAL):
-	while True:
-		get_data()
-		time.sleep(period)
+    while True:
+        get_data()
+        time.sleep(period)
 
+#List of students
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
-select_year = select_opt[select_level[0]]
 
 #List of subject
-subject = ['TJ','TF','IS','AR','EN','JP','MT','SC','PE','LS','IT','SS','GE','ART']
-sub_grade = ['{}_grade'.format(sub) for sub in subject]
-sub_marks = ['{}_marks'.format(sub) for sub in subject]
-sub_com = ['{}_comments'.format(sub) for sub in subject]
+subject = {'TJ':'Tajweed',
+            'TF':'Tahfidz',
+            'IS':'Islamic Studies',
+            'AR':'Arabic',
+            'EN':'English',
+            'JP':'Japanese',
+            'MT':'Mathematics',
+            'SC':'Science',
+            'PE':'Physical Education',
+            'LS':'Living Skill',
+            'IT':'Information and Communication in Technology',
+            'SS':'Social Study',
+            'GE':'Geography',
+            'ART':'Art'}
+
+sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
+sub_marks = ['{}_marks'.format(sub) for sub in subject.keys()]
+sub_com = ['{}_comments'.format(sub) for sub in subject.keys()]
+
+#List of co and extra curricular
+select_act = {'Co-Curricular' : list(range(1,6)), 'Extra-Curricular' : list(range(1,4))}
+select_item = list(select_act.keys())
 
 app = dash.Dash(__name__)
 
@@ -86,112 +103,266 @@ server = app.server
 get_data()
 
 def serve_layout():
-	return html.Div([
-		html.H3('YUAI International Islamic School - Progress Report Card'),
-		dcc.Tabs(id='tabs-id', value='tab-report',children=[
-			dcc.Tab(label='Full Report', value='tab-report'),
-			dcc.Tab(label='Submit Marks and Grade (Academics)', value='tab-submit1'),
-			dcc.Tab(label='Submit Notes (Academics)', value='tab-submit2'),
-			dcc.Tab(label='Submit Co-curricular and Extra-curricular (Grade)', value='tab-submit3'),
-			dcc.Tab(label='Submit Co-curricular and Extra-curricular (Comments)', value='tab-submit4'),
-			dcc.Tab(label='Submit Behaviour/Affectiveness', value='tab-submit5'),
-			]),
-		html.Div(id='tab-contents')
-		])
+    return html.Div([
+        html.H3('YUAI International Islamic School - Progress Report Card'),
+        #header(),
+        dcc.Tabs(id='tabs-id', value='tab-report',children=[
+            dcc.Tab(label='Full Report', value='tab-report'),
+            dcc.Tab(label='Submit Marks and Grade (Academics)', value='tab-submit1'),
+            dcc.Tab(label='Submit Notes (Academics)', value='tab-submit2'),
+            dcc.Tab(label='Submit Co-curricular and Extra-curricular (Grade)', value='tab-submit3'),
+            dcc.Tab(label='Submit Co-curricular and Extra-curricular (Comments)', value='tab-submit4'),
+            dcc.Tab(label='Submit Behaviour or Affectiveness', value='tab-submit5'),
+            ]),
+        html.Div(id='tab-contents')
+        ])
 
 executor = ThreadPoolExecutor(max_workers=1)
 executor.submit(get_new_update)
 
-app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
+app.css.append_css({"external_url": "https://codepen.io/atiq_np/pen/aXNWWG.css"})
 
 app.layout = serve_layout
 
 @app.callback(Output('tab-contents','children'),
-			[Input('tabs-id','value')])
+            [Input('tabs-id','value')])
 def render_content(tab):
-	if tab == 'tab-report':
-		return report.layout
-	elif tab == 'tab-submit1':
-		return submit1.layout
-	elif tab == 'tab-submit2':
-		return submit2.layout
-	elif tab == 'tab-submit3':
-		return submit3.layout
-	elif tab == 'tab-submit4':
-		return submit4.layout
-	elif tab == 'tab-submit5':
-		return submit5.layout
+    if tab == 'tab-report':
+        return report.layout
+    elif tab == 'tab-submit1':
+        return submit1.layout
+    elif tab == 'tab-submit2':
+        return submit2.layout
+    elif tab == 'tab-submit3':
+        return submit3.layout
+    elif tab == 'tab-submit4':
+       return submit4.layout
+    elif tab == 'tab-submit5':
+        return submit5.layout
 
+#selection year
 @app.callback(
-	Output('year-dropdown','options'), 
-	[Input('level-dropdown','value')])
+    Output('year-dropdown','options'), 
+    [Input('level-dropdown','value')])
 def update_dropdown_level(level):
-	return [{'label':i,'value':i} for i in select_opt[level]]
+    return [{'label':i,'value':i} for i in select_opt[level]]
 
+#selection name
 @app.callback(
-	Output('name-dropdown','options'), 
-	[Input('level-dropdown','value'), 
-	Input('year-dropdown','value')])
+    Output('name-dropdown','options'), 
+    [Input('level-dropdown','value'), 
+    Input('year-dropdown','value')])
 def update_dropdown_name(level,year):
-	select_df = df[(df.Level.isin([level])) & (df.Year.isin([year]))]
-	return [{'label':i,'value':i} for i in list(select_df['Name'])]
+    select_df = df[(df.Level.isin([level])) & (df.Year.isin([year]))]
+    return [{'label':i,'value':i} for i in list(select_df['Name'])]
 
+#full report page - selected person
 @app.callback(
-	Output('display-value','children'), 
-	[Input('level-dropdown','value'),
-	Input('year-dropdown','value'),
-	Input('name-dropdown','value')])
+    Output('display-value','children'), 
+    [Input('level-dropdown','value'),
+    Input('year-dropdown','value'),
+    Input('name-dropdown','value')])
 def display_value(s_level,s_year, s_name):
-	return html.P('You have selected:'), html.P('{} Year {} - {}'.format(s_level,s_year, s_name))
+    return html.P('You have selected:'), html.P('{} Year {} - {}'.format(s_level,s_year, s_name))
 
+#full report page - grades and marks table
 @app.callback(
-	Output('display-grade','children'),
-	[Input('name-dropdown','value')])
+    Output('display-grade','children'),
+    [Input('name-dropdown','value')])
 def display_grade(name):
-	dfi = df[df.Name.isin([name])]
-	return appfunction.grades_table(dfi)
+    dfi = df[df.Name.isin([name])]
+    return appfunction.grades_table(dfi)
 
+#full report page - academic teacher's note table
 @app.callback(
-	Output('display-comments','children'),
-	[Input('name-dropdown','value')])
+    Output('display-comments','children'),
+    [Input('name-dropdown','value')])
 def display_comments(name):
-	dfi = df[df.Name.isin([name])]
-	return appfunction.comments_table(dfi)
+    dfi = df[df.Name.isin([name])]
+    return appfunction.comments_table(dfi)
 
+#full report page - co-curricular grade table
 @app.callback(
-	Output('display-cc-grade','children'),
-	[Input('name-dropdown','value')])
+    Output('display-cc-grade','children'),
+    [Input('name-dropdown','value')])
 def display_grade_cc(name):
-	dfi = df[df.Name.isin([name])]
-	return appfunction.co_table(dfi)
+    dfi = df[df.Name.isin([name])]
+    return appfunction.co_table(dfi)
 
+#full report page - extra-curricular grade table
 @app.callback(
-	Output('display-ex-grade','children'),
-	[Input('name-dropdown','value')])
+    Output('display-ex-grade','children'),
+    [Input('name-dropdown','value')])
 def display_grade_ex(name):
-	dfi = df[df.Name.isin([name])]
-	return appfunction.extra_table(dfi)
+    dfi = df[df.Name.isin([name])]
+    return appfunction.extra_table(dfi)
 
+#full report page - co-curricular teacher's note table
 @app.callback(
-	Output('display-cc-comments','children'),
-	[Input('name-dropdown','value')])
+    Output('display-cc-comments','children'),
+    [Input('name-dropdown','value')])
 def display_comments_cc(name):
-	dfi = df[df.Name.isin([name])]
-	return appfunction.co_comments(dfi)
+    dfi = df[df.Name.isin([name])]
+    return appfunction.co_comments(dfi)
 
+#full report page - extra-curricular teacher's note table
 @app.callback(
-	Output('display-ex-comments','children'),
-	[Input('name-dropdown','value')])
+    Output('display-ex-comments','children'),
+    [Input('name-dropdown','value')])
 def display_comments_ex(name):
-	dfi = df[df.Name.isin([name])]
-	return appfunction.extra_comments(dfi)
+    dfi = df[df.Name.isin([name])]
+    return appfunction.extra_comments(dfi)
 
+#full report page - behaviour attitude table
 @app.callback(
-	Output('display-attitude','children'),
-	[Input('name-dropdown','value')])
+    Output('display-attitude','children'),
+    [Input('name-dropdown','value')])
 def display_attitude(name):
-	dfi = df[df.Name.isin([name])]
-	return appfunction.attitude(dfi)
+    dfi = df[df.Name.isin([name])]
+    return appfunction.attitude(dfi)
+
+#submit1 - selected subject for submitting (marks table output)
+@app.callback(
+    Output('submit-subject-marks','children'),
+    [Input('subject-dropdown','value'),
+    Input('name-dropdown','value')])
+def marks_submit_table(subcode,name):
+    dfi = df[df.Name.isin([name])]
+    grade = '{}_grade'.format(subcode)
+    marks = '{}_marks'.format(subcode)
+    return appfunction.submit_sub_marks(dfi,subcode,grade,marks)
+
+#submit1 - update cell (marks)
+@app.callback(
+    Output('container-marks','children'),
+    [Input('submit-marks-button','n_clicks'),
+    Input('name-dropdown','value'),
+    Input('subject-dropdown','value')],
+    [State('input-marks','value')])
+def submit_marks(clicks, name, subcode, value):
+    works = appfunction.access_wsheet('marks')
+    sub_row = works.find(name).row
+    sub_col = works.find((subject.get(subcode)).upper()).col
+    works.update_cell(sub_row,sub_col,value)
+
+#submit2 - selected subject for submitting (comments table output)
+@app.callback(
+    Output('submit-subject-comments','children'),
+    [Input('subject-dropdown','value'),
+    Input('name-dropdown','value')])
+def comments_submit_table(subcode,name):
+    dfi = df[df.Name.isin([name])]
+    comments = '{}_comments'.format(subcode)
+    return appfunction.submit_sub_comments(dfi,subcode,comments)
+
+#submit2 - update cell (notes/comments)
+@app.callback(
+    Output('container-comments','children'),
+    [Input('submit-comments-button','n_clicks'),
+    Input('name-dropdown','value'),
+    Input('subject-dropdown','value')],
+    [State('input-comments','value')])
+def submit_comments(clicks, name, subcode, value):
+    works = appfunction.access_wsheet('comments')
+    sub_row = works.find(name).row
+    sub_col = works.find((subject.get(subcode)).upper()).col
+    works.update_cell(sub_row,sub_col,value)
+
+#submit3 and 4 - selection of items for submitting (activity level)
+@app.callback(
+    Output('placeholder-dropdown','options'), 
+    [Input('activity-dropdown','value')])
+def update_dropdown_activity(activity):
+    return [{'label':i,'value':i} for i in select_act[activity]]
+
+#submit3 - selected item for submitting (grades table output)
+@app.callback(
+    Output('submit-activity-grades','children'),
+    [Input('activity-dropdown','value'),
+    Input('placeholder-dropdown','value'),
+    Input('name-dropdown','value')])
+def act_grades_submit_table(act,pholder,name):  
+    dfi = df[df.Name.isin([name])] 
+    if act == 'Co-curricular':
+        return appfunction.submit_act_grades(dfi,pholder,items='CC{}'.format(pholder))
+    elif act == 'Extra-curricular':
+        return appfunction.submit_act_grades(dfi,pholder,items='extraCC{}'.format(pholder))
+
+#submit3 - update cell (activity grades)
+@app.callback(
+    Output('container-act-grades','children'),
+    [Input('submit-act-grades-button','n_clicks'),
+    Input('name-dropdown','value'), 
+    Input('activity-dropdown','value'),
+    Input('placeholder-dropdown','value')],
+    [State('input-act-component','value'), State('input-act-attendance','value'), State('input-act-participation','value'),
+    State('input-act-effort','value'), State('input-act-attitude','value'), State('input-act-grade','value'),])
+def submit_coextra_grades(clicks, name, act, pholder, v_comp, v_attend, v_part, v_eff, v_att, v_grade):
+    if act == 'Co-Curricular':
+        works = appfunction.access_wsheet('cocurricular')
+    elif act == 'Extra-Curricular':
+        works = appfunction.access_wsheet('extra')
+    sub_row = works.find(name).row
+    works.update_cell(sub_row, works.find('{} {} (Activity)'.format(act,pholder)).col, v_comp)
+    works.update_cell(sub_row, works.find('{} {} (Attendance)'.format(act,pholder)).col, v_attend)
+    works.update_cell(sub_row, works.find('{} {} (Participation)'.format(act,pholder)).col, v_part)
+    works.update_cell(sub_row, works.find('{} {} (Effort)'.format(act,pholder)).col, v_eff)
+    works.update_cell(sub_row, works.find('{} {} (Attitude)'.format(act,pholder)).col, v_att)
+    works.update_cell(sub_row, works.find('{} {} (Grade)'.format(act,pholder)).col, v_grade)
+
+#submit4 - selected item for submitting (comments table output)
+@app.callback(
+    Output('submit-activity-comments','children'),
+    [Input('activity-dropdown','value'),
+    Input('placeholder-dropdown','value'),
+    Input('name-dropdown','value')])
+def act_grades_submit_table(act, pholder, name):  
+    dfi = df[df.Name.isin([name])] 
+    if act == 'Co-Curricular':
+        return appfunction.submit_act_comments(dfi,pholder,items='CC{}'.format(pholder))
+    elif act == 'Extra-Curricular':
+        return appfunction.submit_act_comments(dfi,pholder,items='extraCC{}'.format(pholder))
+
+#submit4 - update cell (activity notes/comments)
+@app.callback(
+    Output('container-act-comments','children'),
+    [Input('submit-act-comments-button','n_clicks'),
+    Input('name-dropdown','value'),
+    Input('activity-dropdown','value'),
+    Input('placeholder-dropdown','value')],
+    [State('input-act-comments','value')])
+def submit_comments(clicks, name, act, pholder, value):
+    if act == 'Co-Curricular':
+        works = appfunction.access_wsheet('cocurricular com')
+    elif act == 'Extra-Curricular':
+        works = appfunction.access_wsheet('extra com')
+    sub_row = works.find(name).row
+    sub_col = works.find('{} {} (Comments)'.format(act,pholder)).col
+    works.update_cell(sub_row,sub_col,value)
+
+#submit5 - selected name for submitting (comments table output)
+@app.callback(
+    Output('submit-attitude','children'),
+    [Input('name-dropdown','value')])
+def submit_attitude(name):
+    dfi = df[df.Name.isin([name])]
+    return appfunction.submit_attitude(dfi)
+
+#submit5 - update cell (attitude/behaviour)
+@app.callback(
+    Output('container-att','children'),
+    [Input('submit-att-button','n_clicks'),
+    Input('name-dropdown','value')],
+    [State('input-att-1','value'), State('input-att-2','value'), State('input-att-3','value'),
+    State('input-att-4','value'), State('input-att-5','value')])
+def submit_comments(clicks, name, val1, val2, val3, val4, val5):
+    works = appfunction.access_wsheet('att behaviour')
+    sub_row = works.find(name).row
+    works.update_cell(sub_row, works.find('Akhlaq').col, val1)
+    works.update_cell(sub_row, works.find('Discipline').col, val2)
+    works.update_cell(sub_row, works.find('Diligent').col, val3)
+    works.update_cell(sub_row, works.find('Interaction').col, val4)
+    works.update_cell(sub_row, works.find('Respect').col, val5)
 
 if __name__ == '__main__':
-	app.run_server(debug=True)
+    app.run_server(debug=True)
