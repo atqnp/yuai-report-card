@@ -5,18 +5,30 @@ from dash.dependencies import Input, Output
 
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
-select_year = select_opt[select_level[0]]
 
 #List of subject
-subject = ['TJ','TF','IS','AR','EN','JP','MT','SC','PE','LS','IT','SS','GE','ART']
-sub_grade = ['{}_grade'.format(sub) for sub in subject]
-sub_marks = ['{}_marks'.format(sub) for sub in subject]
-sub_com = ['{}_comments'.format(sub) for sub in subject]
+subject = {'TJ':'Tajweed',
+			'TF':'Tahfidz',
+			'IS':'Islamic Studies',
+			'AR':'Arabic',
+			'EN':'English',
+			'JP':'Japanese',
+			'MT':'Mathematics',
+			'SC':'Science',
+			'PE':'Physical Education',
+			'LS':'Living Skill',
+			'IT':'Information and Communication in Technology',
+			'SS':'Social Study',
+			'GE':'Geography',
+			'ART':'Art'}
+
+sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
+sub_marks = ['{}_marks'.format(sub) for sub in subject.keys()]
+sub_com = ['{}_comments'.format(sub) for sub in subject.keys()]
 
 layout = html.Div(
 		[
 			html.Div([
-			html.Div(id='refresh-data'),
 			dcc.Dropdown(
 				id='level-dropdown',
 				options=[{'label':i,'value':i} for i in select_level],
@@ -34,7 +46,17 @@ layout = html.Div(
 			html.Hr(),
 			html.Div(id='display-value'),
 			html.Hr(),
-			html.Div(id='display-grade')
+			html.H5('Reports of all Academics Achievement'),
+			html.Div(id='display-grade'),
+			html.Br(),
+			html.P('Select the subject you wish to submit the marks:'),
+			html.Div([dcc.Dropdown(
+				id='subject-dropdown',
+				options=[{'label':i,'value':j} for i,j in zip(subject.values(),subject.keys())],
+				placeholder="Select subject"
+				)]		
+			),
+			html.Div(id='submit-subject-marks')
 		]
 	)
 

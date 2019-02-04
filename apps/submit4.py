@@ -5,12 +5,13 @@ from dash.dependencies import Input, Output
 
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
-select_year = select_opt[select_level[0]]
+
+select_act = {'Co-Curricular' : list(range(1,6)), 'Extra-Curricular' : list(range(1,4))}
+select_item = list(select_act.keys())
 
 layout = html.Div(
 		[
 			html.Div([
-			html.Div(id='refresh-data'),
 			dcc.Dropdown(
 				id='level-dropdown',
 				options=[{'label':i,'value':i} for i in select_level],
@@ -26,8 +27,24 @@ layout = html.Div(
 				),
 			]),
 			html.Hr(),
+			html.H5("Report of Co-curricular Activities - Teacher's Note"),
 			html.Div(id='display-cc-comments'),
 			html.Hr(),
-			html.Div(id='display-ex-comments')
+			html.H5("Report of Extra-curricular Activities - Teacher's Note"),
+			html.Div(id='display-ex-comments'),
+			html.Br(),
+			html.P('Select the Activities to submit the notes:'),
+			html.Div([
+			dcc.Dropdown(
+				id='activity-dropdown',
+				options=[{'label':i,'value':i} for i in select_item],
+				placeholder="Select activity",
+				),
+			dcc.Dropdown(
+				id='placeholder-dropdown',
+				placeholder="Select the placeholder number"
+				),
+			]),
+			html.Div(id='submit-activity-comments')
 		]
 	)

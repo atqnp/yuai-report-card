@@ -1,4 +1,5 @@
 import dash
+import appfunction
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -10,7 +11,6 @@ select_year = select_opt[select_level[0]]
 layout = html.Div(
 		[
 			html.Div([
-			html.Div(id='refresh-data'),
 			dcc.Dropdown(
 				id='level-dropdown',
 				options=[{'label':i,'value':i} for i in select_level],
@@ -26,6 +26,11 @@ layout = html.Div(
 				),
 			]),
 			html.Hr(),
-			html.Div(id='display-attitude')
+			html.H5("Report of Behaviour or Affectiveness for submission"),
+			html.Div(id='submit-attitude'),
+
+
+
 		]
 	)
+
