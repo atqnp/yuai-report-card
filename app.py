@@ -283,9 +283,9 @@ def update_dropdown_activity(activity):
     Input('name-dropdown','value')])
 def act_grades_submit_table(act,pholder,name):  
     dfi = df[df.Name.isin([name])] 
-    if act == 'Co-curricular':
+    if act == 'Co-Curricular':
         return appfunction.submit_act_grades(dfi,pholder,items='CC{}'.format(pholder))
-    elif act == 'Extra-curricular':
+    elif act == 'Extra-Curricular':
         return appfunction.submit_act_grades(dfi,pholder,items='extraCC{}'.format(pholder))
 
 #submit3 - update cell (activity grades)
