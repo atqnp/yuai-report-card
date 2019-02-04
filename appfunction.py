@@ -1,108 +1,293 @@
+import os
+import gspread
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from oauth2client.service_account import ServiceAccountCredentials
 
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
 select_year = select_opt[select_level[0]]
 
 #List of subject
-subject = ['TJ','TF','IS','AR','EN','JP','MT','SC','PE','LS','IT','SS','GE','ART']
-sub_grade = ['{}_grade'.format(sub) for sub in subject]
-sub_marks = ['{}_marks'.format(sub) for sub in subject]
-sub_com = ['{}_comments'.format(sub) for sub in subject]
+subject = {'TJ':'Tajweed',
+            'TF':'Tahfidz',
+            'IS':'Islamic Studies',
+            'AR':'Arabic',
+            'EN':'English',
+            'JP':'Japanese',
+            'MT':'Mathematics',
+            'SC':'Science',
+            'PE':'Physical Education',
+            'LS':'Living Skill',
+            'IT':'Information and Communication in Technology',
+            'SS':'Social Study',
+            'GE':'Geography',
+            'ART':'Art'}
+
+sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
+sub_marks = ['{}_marks'.format(sub) for sub in subject.keys()]
+sub_com = ['{}_comments'.format(sub) for sub in subject.keys()]
+
+def access_wsheet(item):
+    """accessing worksheet based on item(input)"""
+    access = 'all {}'.format(item)
+    scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
+
+    credentials = ServiceAccountCredentials.from_json_keyfile_name('gspreadsheet-yuai-638e20a7f7b0.json',scope)
+
+    file = gspread.authorize(credentials)
+    sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
+    wks = sheet.worksheet(access)
+    wks.update_cell(sub_row,sub_col)
+    return wks
 
 def grades_table(dataframe):
-        return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in ['Component','Grade', 'Marks']])] +
+    """return table for marks and grades of a student"""
+    return html.Table(
+    # Header
+    [html.Tr([html.Th(col) for col in ['Component','Grade','Marks']])] +
 
-        # Body
-        [html.Tr(
-                [html.Td(grade.strip('_grade'))] +
-                [html.Td(dataframe[grade])] +
-                [html.Td(dataframe[marks])]
-                ) for grade,marks in zip(sub_grade,sub_marks)
-        ]
-        )
+    # Body
+    [html.Tr(
+        [html.Td(sub)] +
+        [html.Td(dataframe[grade])] +
+        [html.Td(dataframe[marks])]
+        ) for sub,grade,marks in zip(subject.values(),sub_grade,sub_marks)
+    ]
+    )
 
 def comments_table(dataframe):
-        return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in ['Component','Competency and Accomplishment']])] +
+    """return table for notes/comments of a student"""
+    return html.Table(
+    # Header
+    [html.Tr([html.Th(col) for col in ['Component','Competency and Accomplishment']])] +
 
-        # Body
+    # Body
+    [html.Tr(
+        [html.Td(sub)] +
+        [html.Td([html.P(value) for index, value in dataframe[comments].str.split('\n',expand=True).items()])]
+        ) for sub,comments in zip(subject.values(),sub_com)
+    ]
+    )
+
+def co_table(dataframe):
+    """return table for co-curricular activities (grades) of a student"""
+    return html.Table(
+        #Header
+        [html.Tr([html.Th(col) for col in ['Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+
+        #Body
         [html.Tr(
-                [html.Td(sub.strip('_comments'))] +
-                [html.Td([html.P(value) for index, value in dataframe[sub].str.split('\n',expand=True).items()])]
-                ) for sub in sub_com
+            [html.Td(dataframe['CC{}'.format(num)])] +
+            [html.Td(dataframe['CC{}A'.format(num)])] +
+            [html.Td(dataframe['CC{}P'.format(num)])] +
+            [html.Td(dataframe['CC{}E'.format(num)])] +
+            [html.Td(dataframe['CC{}AT'.format(num)])] +
+            [html.Td(dataframe['CC{}G'.format(num)])]
+            ) for num in range(1,6)]
+            )
+
+def extra_table(dataframe):
+    """return table for extra-curricular activities (grades) of a student"""
+    return html.Table(
+        #Header
+        [html.Tr([html.Th(col) for col in ['Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+
+        #Body
+        [html.Tr(
+            [html.Td(dataframe['extraCC{}'.format(num)])] +
+            [html.Td(dataframe['extraCC{}A'.format(num)])] +
+            [html.Td(dataframe['extraCC{}P'.format(num)])] +
+            [html.Td(dataframe['extraCC{}E'.format(num)])] +
+            [html.Td(dataframe['extraCC{}AT'.format(num)])] +
+            [html.Td(dataframe['extraCC{}G'.format(num)])]
+            ) for num in range(1,4)]
+        )
+
+def co_comments(dataframe):
+    """return table for co-curricular activities (notes/comments) of a student"""
+    return html.Table(
+        #Header
+        [html.Tr([html.Th(col) for col in ['No.','Component','Competency and Accomplishment']])] +
+
+        #Body
+        [html.Tr(
+            [html.Td(num)] +
+            [html.Td(dataframe['CC{}'.format(num)])] +
+            [html.Td(dataframe['CC{}comment'.format(num)])]
+            ) for num in range(1,6)]
+        )
+
+def extra_comments(dataframe):
+    """return table for extra-curricular activities (notes/comments) of a student"""
+    return html.Table(
+        #Header
+        [html.Tr([html.Th(col) for col in ['No.','Component','Competency and Accomplishment']])] +
+
+        #Body
+        [html.Tr(
+            [html.Td(num)] +
+            [html.Td(dataframe['extraCC{}'.format(num)])] +
+            [html.Td(dataframe['extraCC{}comment'.format(num)])]
+            ) for num in range(1,4)]
+        )
+
+def attitude(dataframe):
+    """return table for attitude grades of a student"""
+    return html.Table(
+        #Header
+        [html.Tr([html.Th(col) for col in ['Component','Grade']])] +
+
+        #Body
+        [html.Tr(
+            [html.Td(att)] +
+            [html.Td(dataframe[att])]
+            ) for att in ['Akhlaq','Discipline','Diligent','Interaction','Respect']]
+        )
+
+def submit_sub_marks(dataframe,subcode,grade,marks):
+    """return table for marks submission of a student based on selected subject"""
+    return html.Table(
+        #Header
+        [html.Tr([html.Th(col) for col in ['Component to Submit','Grade (Before submission)','Marks (Before submission)']])] +
+
+        #Body
+        [html.Tr(
+                [html.Td(subject.get(subcode))] + 
+                [html.Td(dataframe[grade])] +
+                [html.Td(dataframe[marks])] +
+                [html.Td(html.Div(dcc.Input(id='input-marks',type='number')))] + 
+                [html.Td(html.Div(html.Button('Submit',id='submit-marks-button')))] +
+                [html.Td(html.Div(id='container-marks'))]
+                )
         ]
         )
 
-def co_table(dataframe):
-        return html.Table(
-                #Header
-                [html.Tr([html.Th(col) for col in ['Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+def submit_sub_comments(dataframe,subcode,comment):
+    """return table for notes/comments submission of a student based on selected subject"""
+    return html.Table(
+        #Header
+        [html.Tr([html.Th(col) for col in ['Component to Submit','Notes (Before submission)']])] +
 
-                #Body
-                [html.Tr(
-                        [html.Td(dataframe['CC{}'.format(num)])] +
-                        [html.Td(dataframe['CC{}A'.format(num)])] +
-                        [html.Td(dataframe['CC{}P'.format(num)])] +
-                        [html.Td(dataframe['CC{}E'.format(num)])] +
-                        [html.Td(dataframe['CC{}AT'.format(num)])] +
-                        [html.Td(dataframe['CC{}G'.format(num)])]
-                        ) for num in range(1,6)]
-                )
+        #Body
+        [html.Tr(
+                [html.Td(subject.get(subcode))] + 
+                [html.Td([html.P(value) for index, value in dataframe[comment].str.split('\n',expand=True).items()])]
+            )
+        ] +
+        [html.Tr(
+        		[html.Td(html.P("Notes/Comments to Submit"))] +
+        		[html.Td(html.Div(dcc.Textarea(id='input-comments',placeholder='Enter your notes/comments here..',style={'width': '100%'})))] 
+            )
+        ] +
+        [html.Tr(
+            [html.Td(html.Div(html.Button('Submit',id='submit-comments-button')))] +
+            [html.Td(html.Div(id='container-comments'))]
+            )]
+        )
 
-def extra_table(dataframe):
-        return html.Table(
-                #Header
-                [html.Tr([html.Th(col) for col in ['Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+def submit_act_grades(dataframe,num,items):
+    """return table for grades submission 
+        of a student based on 
+        selected item(co-curricular/extra-curricular)
+        and placeholder number"""
+    return html.Table(
+        [html.Tr(html.Th(html.P('Data before submission'),colSpan='7'))] +
+        #Header - info
+        [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+        #Body - info
+        [html.Tr(
+            [html.Td(num)] +
+            [html.Td(dataframe[items])] +
+            [html.Td(dataframe[items + 'A'])] +
+            [html.Td(dataframe[items + 'P'])] +
+            [html.Td(dataframe[items + 'E'])] +
+            [html.Td(dataframe[items + 'AT'])] +
+            [html.Td(dataframe[items + 'G'])]
+            )] +
+        [html.Tr([html.Td('')])] +
+        [html.Tr(html.Th(html.P('Changes/Input for submission'),colSpan='7'))] +
+        #Header - submit
+        [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+        #Body - submit
+        [html.Tr(
+            [html.Td(num)] +
+            [html.Td(html.Div(dcc.Input(id='input-act-component',type='text')))] +
+    		[html.Td(html.Div(dcc.Input(id='input-act-attendance',type='text')))] + 
+            [html.Td(html.Div(dcc.Input(id='input-act-participation',type='text')))] +
+            [html.Td(html.Div(dcc.Input(id='input-act-effort',type='text')))] +
+            [html.Td(html.Div(dcc.Input(id='input-act-attitude',type='text')))] +
+            [html.Td(html.Div(dcc.Input(id='input-act-grade',type='text')))]
+        	)] +
+        [html.Tr(
+            [html.Td(html.Div(html.Button('Submit',id='submit-act-grades-button')),colSpan='2')] +
+            [html.Td(html.Div(id='container-act-grades'))]
+        )]
+        )
 
-                #Body
-                [html.Tr(
-                        [html.Td(dataframe['extraCC{}'.format(num)])] +
-                        [html.Td(dataframe['extraCC{}A'.format(num)])] +
-                        [html.Td(dataframe['extraCC{}P'.format(num)])] +
-                        [html.Td(dataframe['extraCC{}E'.format(num)])] +
-                        [html.Td(dataframe['extraCC{}AT'.format(num)])] +
-                        [html.Td(dataframe['extraCC{}G'.format(num)])]
-                        ) for num in range(1,4)]
-                )
+def submit_act_comments(dataframe,num,items):
+    """return table for notes/comments submission 
+        of a student based on 
+        selected item(co-curricular/extra-curricular)
+        and placeholder number"""
+    return html.Table(
+        [html.Tr(html.Th(html.P('Data before submission'),colSpan='3'))] +
+        #Header - info
+        [html.Tr([html.Th(col) for col in ['No','Component','Competency and Accomplishment']])] +
+        #Body - info
+        [html.Tr(
+            [html.Td(num)] +
+            [html.Td(dataframe[items])] +
+            [html.Td(dataframe[items + 'comment'])]
+            )] +
+        [html.Tr([html.Td('')])] +
+        [html.Tr(html.Th(html.P('Changes/Input for submission'),colSpan='3'))] +
+        #Header - submit
+        [html.Tr([html.Th(col) for col in ['No','Component','Competency and Accomplishment']])] +
+        #Body - submit
+        [html.Tr(
+            [html.Td(num)] +
+            [html.Td(dataframe[items])] +
+            [html.Td(html.Div(dcc.Textarea(id='input-act-comments',placeholder='Enter your notes/comments here..',style={'width': '100%'})))]
+            )] +
+        [html.Tr(
+            [html.Td(html.Div(html.Button('Submit',id='submit-act-comments-button')),colSpan='2')] +
+            [html.Td(html.Div(id='container-act-comments'))]
+        )]
+        )
 
-def co_comments(dataframe):
-        return html.Table(
-                #Header
-                [html.Tr([html.Th(col) for col in ['Component','Competency and Accomplishment']])] +
+def submit_attitude(dataframe):
+    """return table for attitude grades submission of a student"""
+    return html.Table(
+        [html.Tr(html.Th(html.P('Changes/Input for submission'),colSpan='4'))] +
+        #Header
+        [html.Tr([html.Th(col) for col in ['Component','Grade (Before submission)','','']])] +
 
-                #Body
-                [html.Tr(
-                        [html.Td(dataframe['CC{}'.format(num)])] +
-                        [html.Td(dataframe['CC{}comment'.format(num)])]
-                        ) for num in range(1,6)]
-                )
-
-def extra_comments(dataframe):
-        return html.Table(
-                #Header
-                [html.Tr([html.Th(col) for col in ['Component','Competency and Accomplishment']])] +
-
-                #Body
-                [html.Tr(
-                        [html.Td(dataframe['extraCC{}'.format(num)])] +
-                        [html.Td(dataframe['extraCC{}comment'.format(num)])]
-                        ) for num in range(1,4)]
-                )
-
-def attitude(dataframe):
-        return html.Table(
-                #Header
-                [html.Tr([html.Th(col) for col in ['Component','Grade']])] +
-
-                #Body
-                [html.Tr(
-                        [html.Td(att)] +
-                        [html.Td(dataframe[att])]
-                        ) for att in ['Akhlaq','Discipline','Diligent','Interaction','Respect']]
-                )
+        #Body
+        [html.Tr(
+            [html.Td(html.P('Akhlaq'))] + [html.Td(dataframe['Akhlaq'])] + 
+            [html.Td(html.Div(dcc.Input(id='input-att-1',type='text')))]
+            )] +
+        [html.Tr(
+            [html.Td(html.P('Discipline'))] + [html.Td(dataframe['Discipline'])] + 
+            [html.Td(html.Div(dcc.Input(id='input-att-2',type='text')))]
+            )] +
+        [html.Tr(
+            [html.Td(html.P('Diligent'))] + [html.Td(dataframe['Diligent'])] + 
+            [html.Td(html.Div(dcc.Input(id='input-att-3',type='text')))]
+            )] +
+        [html.Tr(
+            [html.Td(html.P('Interaction'))] + [html.Td(dataframe['Interaction'])] + 
+            [html.Td(html.Div(dcc.Input(id='input-att-4',type='text')))]
+            )] +
+        [html.Tr(
+            [html.Td(html.P('Respect'))] + [html.Td(dataframe['Respect'])] + 
+            [html.Td(html.Div(dcc.Input(id='input-att-5',type='text')))]
+            )] +
+        [html.Tr(
+            [html.Td(html.Div(html.Button('Submit',id='submit-att-button')),colSpan='2')] +
+            [html.Td(html.Div(id='container-att'))]
+        )]
+        )
