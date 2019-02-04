@@ -94,6 +94,7 @@ def co_table(dataframe):
 
         #Body
         [html.Tr(
+            [html.Td(num)] +
             [html.Td(dataframe['CC{}'.format(num)])] +
             [html.Td(dataframe['CC{}A'.format(num)])] +
             [html.Td(dataframe['CC{}P'.format(num)])] +
@@ -111,6 +112,7 @@ def extra_table(dataframe):
 
         #Body
         [html.Tr(
+            [html.Td(num)] +
             [html.Td(dataframe['extraCC{}'.format(num)])] +
             [html.Td(dataframe['extraCC{}A'.format(num)])] +
             [html.Td(dataframe['extraCC{}P'.format(num)])] +
