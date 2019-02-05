@@ -18,7 +18,7 @@ scope = ['https://spreadsheets.google.com/feeds',
 SHEET_PRIVATE_KEY = os.environ['SHEET_PRIVATE_KEY']
 SHEET_PRIVATE_KEY = SHEET_PRIVATE_KEY.replace('\\n', '\n')
 
-VALID_USERNAME_PASSWORD_PAIRS = os.environ['VALID_USERNAME_PASSWORD_PAIRS']
+VALID_USERNAME_PASSWORD_PAIRS = { os.environ['BASIC_USERNAME']: os.environ['BASIC_PASS'] }
 
 credential = {
                 "type": "service_account",
