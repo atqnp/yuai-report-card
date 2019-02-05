@@ -21,7 +21,7 @@ SHEET_PRIVATE_KEY = SHEET_PRIVATE_KEY.replace('\\n', '\n')
 username = os.environ['BASIC_USERNAME']
 password = os.environ['BASIC_PASS']
 
-VALID_USERNAME_PASSWORD_PAIRS = { user : password }
+VALID_USERNAME_PASSWORD_PAIRS = { username : password }
 
 credential = {
                 "type": "service_account",
