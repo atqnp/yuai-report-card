@@ -18,7 +18,10 @@ scope = ['https://spreadsheets.google.com/feeds',
 SHEET_PRIVATE_KEY = os.environ['SHEET_PRIVATE_KEY']
 SHEET_PRIVATE_KEY = SHEET_PRIVATE_KEY.replace('\\n', '\n')
 
-VALID_USERNAME_PASSWORD_PAIRS = { os.environ['BASIC_USERNAME']: os.environ['BASIC_PASS'] }
+USERNAME = os.environ['BASIC_USERNAME']
+PASSWORD = os.environ['BASIC_PASS']
+
+VALID_USERNAME_PASSWORD_PAIRS = { USERNAME : PASSWORD }
 
 credential = {
                 "type": "service_account",
@@ -80,7 +83,7 @@ sub_com = ['{}_comments'.format(sub) for sub in subject.keys()]
 select_act = {'Co-Curricular' : list(range(1,6)), 'Extra-Curricular' : list(range(1,4))}
 select_item = list(select_act.keys())
 
-app = dash.Dash(__name__)
+app = dash.Dash('auth')
 auth = dash_auth.BasicAuth(
     app,
     VALID_USERNAME_PASSWORD_PAIRS
