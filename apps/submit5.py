@@ -1,12 +1,9 @@
 import dash
-import appfunction
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
 
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
-select_year = select_opt[select_level[0]]
 
 layout = html.Div(
 		[
@@ -28,9 +25,6 @@ layout = html.Div(
 			html.Hr(),
 			html.H5("Report of Behaviour or Affectiveness for submission"),
 			html.Div(id='submit-attitude'),
-
-
-
 		]
 	)
 
