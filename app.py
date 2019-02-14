@@ -130,7 +130,10 @@ def serve_layout():
 executor = ThreadPoolExecutor(max_workers=1)
 executor.submit(get_new_update)
 
-app.css.append_css({"external_url": "https://codepen.io/atiq_np/pen/aXNWWG.css"})
+#basic
+app.css.append_css({"external_url": "https://codepen.io/atiq_np/pen/rPZeMv.css"})
+#for printing
+#app.css.append_css({"external_url": "https://codepen.io/atiq_np/pen/aXNWWG.css"})
 
 app.layout = serve_layout
 
