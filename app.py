@@ -49,7 +49,6 @@ def get_data():
     wks = sheet.worksheet("master")
     df = pd.DataFrame(wks.get_all_records())
 
-
 def get_new_update(period=UPDATE_INTERVAL):
     while True:
         get_data()
@@ -58,6 +57,7 @@ def get_new_update(period=UPDATE_INTERVAL):
 #List of students
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
+select_sem = ['{}/2018/19'.format(num) for num in range(1,4)]
 
 #List of subject
 subject = {'TJ':'Tajweed',
@@ -84,10 +84,6 @@ select_act = {'Co-Curricular' : list(range(1,6)), 'Extra-Curricular' : list(rang
 select_item = list(select_act.keys())
 
 app = dash.Dash(__name__)
-auth = dash_auth.BasicAuth(
-    app,
-    VALID_USERNAME_PASSWORD_PAIRS
-)
 
 app.index_string = '''
 <!DOCTYPE html>
@@ -114,8 +110,31 @@ get_data()
 
 def serve_layout():
     return html.Div([
-        html.H3('YUAI International Islamic School - Progress Report Card'),
+        html.H3('YUAI International Islamic School - Progress Report Card', className="no-print"),
         #header(),
+        html.Div([html.Div([
+                    dcc.Dropdown(
+                        id='level-dropdown',
+                        options=[{'label':i,'value':i} for i in select_level],
+                        placeholder="Select level"
+                        ),
+                    dcc.Dropdown(
+                        id='year-dropdown',
+                        placeholder="Select year"
+                        ),
+                    dcc.Dropdown(
+                        id='name-dropdown',
+                        placeholder="Select name"
+                        ),
+                    dcc.Dropdown(
+                        id='semester-dropdown',
+                        options=[{'label':i,'value':i} for i in select_sem],
+                        placeholder="Select semester"
+                        ),
+                    html.Hr(),
+                    html.Div(id='display-value')
+                    ], className="no-print sheet padding-10mm"),
+                    html.Br(),       
         dcc.Tabs(id='tabs-id', value='tab-report',children=[
             dcc.Tab(label='Full Report', value='tab-report'),
             dcc.Tab(label='Submit Marks and Grade (Academics)', value='tab-submit1'),
@@ -123,17 +142,12 @@ def serve_layout():
             dcc.Tab(label='Submit Co-curricular and Extra-curricular (Grade)', value='tab-submit3'),
             dcc.Tab(label='Submit Co-curricular and Extra-curricular (Comments)', value='tab-submit4'),
             dcc.Tab(label='Submit Behaviour or Affectiveness', value='tab-submit5'),
-            ]),
+            ])], className="no-print"),
         html.Div(id='tab-contents')
         ])
 
 executor = ThreadPoolExecutor(max_workers=1)
 executor.submit(get_new_update)
-
-#basic
-app.css.append_css({"external_url": "https://codepen.io/atiq_np/pen/rPZeMv.css"})
-#for printing
-#app.css.append_css({"external_url": "https://codepen.io/atiq_np/pen/aXNWWG.css"})
 
 app.layout = serve_layout
 
@@ -169,22 +183,36 @@ def update_dropdown_name(level,year):
     select_df = df[(df.Level.isin([level])) & (df.Year.isin([year]))]
     return [{'label':i,'value':i} for i in list(select_df['Name'])]
 
-#full report page - selected person
+#selected person
 @app.callback(
     Output('display-value','children'), 
     [Input('level-dropdown','value'),
     Input('year-dropdown','value'),
     Input('name-dropdown','value')])
-def display_value(s_level,s_year, s_name):
-    return html.P('You have selected:'), html.P('{} Year {} - {}'.format(s_level,s_year, s_name))
+def display_value(level,year,name):
+    return html.P('You have selected:'), html.P('{} Year {} - {}'.format(level,year,name))
 
-#full report page - grades and marks table
+#full report page - student's data
 @app.callback(
-    Output('display-grade','children'),
+    Output('display-student-info','children'), 
+    [Input('level-dropdown','value'),
+    Input('year-dropdown','value'),
+    Input('name-dropdown','value'),
+    Input('semester-dropdown','value')])
+def display_info(level,year,name,sem):
+    return html.Div([html.P('Name : {}'.format(name)),
+        html.Br(), html.P('Level : {}'.format(level)),
+        html.Br(), html.P('Year : {}'.format(year)),
+        html.Br(), html.P('Semester : {}'.format(sem)),
+        ])
+
+#full report page - full academics table
+@app.callback(
+    Output('display-report','children'),
     [Input('name-dropdown','value')])
-def display_grade(name):
+def display_fullgrade(name):
     dfi = df[df.Name.isin([name])]
-    return appfunction.grades_table(dfi)
+    return appfunction.academic_report(dfi)
 
 #full report page - academic teacher's note table
 @app.callback(
@@ -233,6 +261,14 @@ def display_comments_ex(name):
 def display_attitude(name):
     dfi = df[df.Name.isin([name])]
     return appfunction.attitude(dfi)
+
+#submit1 - grades and marks table
+@app.callback(
+    Output('display-grade','children'),
+    [Input('name-dropdown','value')])
+def display_grade(name):
+    dfi = df[df.Name.isin([name])]
+    return appfunction.grades_table(dfi)
 
 #submit1 - selected subject for submitting (marks table output)
 @app.callback(
@@ -296,9 +332,9 @@ def update_dropdown_activity(activity):
     Input('name-dropdown','value')])
 def act_grades_submit_table(act,pholder,name):  
     dfi = df[df.Name.isin([name])] 
-    if act == 'Co-Curricular':
+    if act == 'Co-curricular':
         return appfunction.submit_act_grades(dfi,pholder,items='CC{}'.format(pholder))
-    elif act == 'Extra-Curricular':
+    elif act == 'Extra-curricular':
         return appfunction.submit_act_grades(dfi,pholder,items='extraCC{}'.format(pholder))
 
 #submit3 - update cell (activity grades)
