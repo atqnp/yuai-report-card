@@ -111,7 +111,7 @@ get_data()
 
 def serve_layout():
     return html.Div([
-        html.H3('YUAI International Islamic School - Progress Report Card', className="no-print"),
+        html.H4('YUAI International Islamic School - Progress Report Card', className="no-print", style={'text-align':'center'}),
         #header(),
         html.Div([html.Div([
                     dcc.Dropdown(
