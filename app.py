@@ -89,12 +89,13 @@ app.index_string = '''
 <!DOCTYPE html>
 <html>
     <head>
+    	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Harmattan">
         {%metas%}
         <title>YUAI - Report Card</title>
         {%favicon%}
         {%css%}
     </head>
-    <body>
+    <body class="A4">
         {%app_entry%}
         <footer>
             {%config%}
