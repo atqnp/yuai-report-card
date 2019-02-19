@@ -84,6 +84,10 @@ select_act = {'Co-Curricular' : list(range(1,6)), 'Extra-Curricular' : list(rang
 select_item = list(select_act.keys())
 
 app = dash.Dash(__name__)
+auth = dash_auth.BasicAuth(
+    app,
+    VALID_USERNAME_PASSWORD_PAIRS
+)
 
 app.index_string = '''
 <!DOCTYPE html>
