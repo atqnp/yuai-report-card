@@ -290,10 +290,11 @@ def marks_submit_table(subcode,name):
 @app.callback(
     Output('container-marks','children'),
     [Input('submit-marks-button','n_clicks'),
+    Input('submit-marks-button', 'n_submit'),
     Input('name-dropdown','value'),
     Input('subject-dropdown','value')],
     [State('input-marks','value')])
-def submit_marks(clicks, name, subcode, value):
+def submit_marks(clicks, submit, name, subcode, value):
     works = appfunction.access_wsheet('marks')
     sub_row = works.find(name).row
     sub_col = works.find((subject.get(subcode)).upper()).col
@@ -313,10 +314,11 @@ def comments_submit_table(subcode,name):
 @app.callback(
     Output('container-comments','children'),
     [Input('submit-comments-button','n_clicks'),
+    Input('submit-comments-button','n_submit'),
     Input('name-dropdown','value'),
     Input('subject-dropdown','value')],
     [State('input-comments','value')])
-def submit_comments(clicks, name, subcode, value):
+def submit_comments(clicks, submit, name, subcode, value):
     works = appfunction.access_wsheet('comments')
     sub_row = works.find(name).row
     sub_col = works.find((subject.get(subcode)).upper()).col
@@ -346,12 +348,13 @@ def act_grades_submit_table(act,pholder,name):
 @app.callback(
     Output('container-act-grades','children'),
     [Input('submit-act-grades-button','n_clicks'),
+    Input('submit-act-grades-button','n_submit'),
     Input('name-dropdown','value'), 
     Input('activity-dropdown','value'),
     Input('placeholder-dropdown','value')],
     [State('input-act-component','value'), State('input-act-attendance','value'), State('input-act-participation','value'),
     State('input-act-effort','value'), State('input-act-attitude','value'), State('input-act-grade','value'),])
-def submit_coextra_grades(clicks, name, act, pholder, v_comp, v_attend, v_part, v_eff, v_att, v_grade):
+def submit_coextra_grades(clicks, submit, name, act, pholder, v_comp, v_attend, v_part, v_eff, v_att, v_grade):
     if act == 'Co-Curricular':
         works = appfunction.access_wsheet('cocurricular')
     elif act == 'Extra-Curricular':
@@ -381,11 +384,12 @@ def act_grades_submit_table(act, pholder, name):
 @app.callback(
     Output('container-act-comments','children'),
     [Input('submit-act-comments-button','n_clicks'),
+    Input('submit-act-comments-button','n_submit'),
     Input('name-dropdown','value'),
     Input('activity-dropdown','value'),
     Input('placeholder-dropdown','value')],
     [State('input-act-comments','value')])
-def submit_comments(clicks, name, act, pholder, value):
+def submit_comments(clicks, submit, name, act, pholder, value):
     if act == 'Co-Curricular':
         works = appfunction.access_wsheet('cocurricular com')
     elif act == 'Extra-Curricular':
@@ -406,10 +410,11 @@ def submit_attitude(name):
 @app.callback(
     Output('container-att','children'),
     [Input('submit-att-button','n_clicks'),
+    Input('submit-att-button','n_submit'),
     Input('name-dropdown','value')],
     [State('input-att-1','value'), State('input-att-2','value'), State('input-att-3','value'),
     State('input-att-4','value'), State('input-att-5','value')])
-def submit_comments(clicks, name, val1, val2, val3, val4, val5):
+def submit_comments(clicks, submit, name, val1, val2, val3, val4, val5):
     works = appfunction.access_wsheet('att behaviour')
     sub_row = works.find(name).row
     works.update_cell(sub_row, works.find('Akhlaq').col, val1)
