@@ -54,7 +54,6 @@ def access_wsheet(item):
     file = gspread.authorize(credentials)
     sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
     wks = sheet.worksheet(access)
-    wks.update_cell(sub_row,sub_col)
     return wks
 
 def grades_table(dataframe):
@@ -62,7 +61,6 @@ def grades_table(dataframe):
     return html.Table(
     # Header
     [html.Tr([html.Th(col) for col in ['Component','Grade','Marks']])] +
-
     # Body
     [html.Tr(
         [html.Td(sub)] +
@@ -77,7 +75,6 @@ def comments_table(dataframe):
     return html.Table(
     # Header
     [html.Tr([html.Th(col) for col in ['Component','Competency and Accomplishment']])] +
-
     # Body
     [html.Tr(
         [html.Td(sub)] +
@@ -91,7 +88,6 @@ def co_table(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
-
         #Body
         [html.Tr(
             [html.Td(num)] +
@@ -109,7 +105,6 @@ def extra_table(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
-
         #Body
         [html.Tr(
             [html.Td(num)] +
@@ -127,7 +122,6 @@ def co_comments(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['No.','Component','Competency and Accomplishment']])] +
-
         #Body
         [html.Tr(
             [html.Td(num)] +
@@ -141,7 +135,6 @@ def extra_comments(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['No.','Component','Competency and Accomplishment']])] +
-
         #Body
         [html.Tr(
             [html.Td(num)] +
@@ -155,7 +148,6 @@ def attitude(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['Component','Grade']])] +
-
         #Body
         [html.Tr(
             [html.Td(att)] + [html.Td(dataframe[att],style=center)]
@@ -167,7 +159,6 @@ def submit_sub_marks(dataframe,subcode,grade,marks):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['Component to Submit','Grade (Before submission)','Marks (Before submission)']])] +
-
         #Body
         [html.Tr(
                 [html.Td(subject.get(subcode))] + 
@@ -188,13 +179,13 @@ def submit_sub_comments(dataframe,subcode,comment):
 
         #Body
         [html.Tr(
-                [html.Td(subject.get(subcode))] + 
-                [html.Td([html.P(value) for index, value in dataframe[comment].str.split('\n',expand=True).items()])]
+            [html.Td(subject.get(subcode))] + 
+            [html.Td([html.P(value) for index, value in dataframe[comment].str.split('\n',expand=True).items()])]
             )
         ] +
         [html.Tr(
-        		[html.Td(html.P("Notes/Comments to Submit"))] +
-        		[html.Td(html.Div(dcc.Textarea(id='input-comments',placeholder='Enter your notes/comments here..',style={'width': '100%'})))] 
+            [html.Td(html.P("Notes/Comments to Submit"))] +
+            [html.Td(html.Div(dcc.Textarea(id='input-comments',placeholder='Enter your notes/comments here..',style={'width': '100%'})))] 
             )
         ] +
         [html.Tr(
@@ -279,7 +270,6 @@ def submit_attitude(dataframe):
         [html.Tr(html.Th(html.P('Changes/Input for submission'),colSpan='3'))] +
         #Header
         [html.Tr([html.Th(col) for col in ['Component','Grade (Before submission)','']])] +
-
         #Body
         [html.Tr(
             [html.Td(html.P('Akhlaq'))] + [html.Td(dataframe['Akhlaq'],style=center)] + 
