@@ -55,6 +55,7 @@ def access_wsheet(item):
     sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
     wks = sheet.worksheet(access)
     return wks
+
 def new_name():
     return html.Table(
         [html.Tr([html.Th(html.P('Input new information to be added'),colSpan='3')])] +
@@ -77,7 +78,7 @@ def update_name(level,year,name):
         [html.Tr([html.Th(html.P('Current information'),colSpan='3')])] +
         [html.Tr([html.Th(col) for col in ['Name','Level','Year']])] +
         [html.Tr(
-            [html.Td(name)] + [html.Td(level,style=center)] + [html.Td(name,style=center)]
+            [html.Td(name)] + [html.Td(level)] + [html.Td(year,style=center)]
             )] +
         [html.Tr([html.Td('')])] +
         [html.Tr([html.Th(html.P('Changes/Input for submission'),colSpan='3')])] +
