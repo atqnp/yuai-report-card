@@ -422,6 +422,7 @@ def submit_comments(clicks, submit, name, val1, val2, val3, val4, val5):
     works.update_cell(sub_row, works.find('Diligent').col, val3)
     works.update_cell(sub_row, works.find('Interaction').col, val4)
     works.update_cell(sub_row, works.find('Respect').col, val5)
+
 #submit6 - selection
 @app.callback(
     Output('display-submit','children'), 
