@@ -2,6 +2,10 @@
 
 Report card application for YUAI International Islamic School
 
+ver 0.8 (2019-02-23)
+--------------------
+- tab for new student/update existing student added
+
 ver 0.8 (2019-02-19)
 --------------------
 - authentication added (username and password required)
