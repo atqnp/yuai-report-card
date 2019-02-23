@@ -10,7 +10,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from oauth2client.service_account import ServiceAccountCredentials
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-from apps import report, submit1, submit2, submit3, submit4, submit5
+from apps import report, submit1, submit2, submit3, submit4, submit5, submit6
 
 scope = ['https://spreadsheets.google.com/feeds',
 		 'https://www.googleapis.com/auth/drive']
@@ -422,6 +422,55 @@ def submit_comments(clicks, submit, name, val1, val2, val3, val4, val5):
     works.update_cell(sub_row, works.find('Diligent').col, val3)
     works.update_cell(sub_row, works.find('Interaction').col, val4)
     works.update_cell(sub_row, works.find('Respect').col, val5)
+#submit6 - selection
+@app.callback(
+    Output('display-submit','children'), 
+    [Input('update-dropdown','value'),
+    Input('level-dropdown','value'),
+    Input('year-dropdown','value'),
+    Input('name-dropdown','value')])
+def display_selection(value,level,year,name):
+    dfi = df[df.Name.isin([name])]
+    if value == 'UP':
+        return appfunction.update_name(level,year,name)
+    elif value == 'SUB':
+        return appfunction.new_name()
+
+#submit6 - new student submission
+@app.callback(
+    Output('container-new','children'),
+    [Input('submit-new-button','n_clicks'),
+    Input('submit-new-button','n_submit')],
+    [State('input-name','value'),
+    State('input-level','value'),
+    State('input-year','value')])
+def submit_name(clicks, submit, name, level, year):
+    def next_available_row(worksheet):
+        str_list = list(filter(None, worksheet.col_values(1)))
+        return len(str_list)+1
+
+    next_row = next_available_row(wks)
+    #column, row, input item
+    if not name in list(df['Name']):
+        wks.update_cell(next_row,1,name)
+        wks.update_cell(next_row,2,level)
+        wks.update_cell(next_row,3,year)
+        return html.P('You have added:'), html.P('{} Year {} - {}'.format(level,year,name))
+    else:
+        return html.P('The name is already available.')
+
+#submit6 - update student info
+@app.callback(
+    Output('container-update','children'),
+    [Input('submit-update-button','n_clicks'),
+    Input('submit-update-button','n_submit'),
+    Input('name-dropdown','value')],
+    [State('update-level','value'),
+    State('update-year','value')])
+def submit_update(clicks, submit, name, level, year):
+    sub_row = wks.find(name).row
+    wks.update_cell(sub_row, 2, level)
+    wks.update_cell(sub_row, 3, year)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
