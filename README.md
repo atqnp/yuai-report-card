@@ -2,6 +2,11 @@
 
 Report card application for YUAI International Islamic School
 
+ver 1.0 (2019-02-23)
+--------------------
+- fiscal year added for submission
+- complete basic report card
+
 ver 0.9 (2019-02-23)
 --------------------
 - tab for new student/update existing student added
