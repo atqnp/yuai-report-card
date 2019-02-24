@@ -3,6 +3,7 @@ import os
 import dash
 import dash_auth
 import gspread
+import fiscalyear
 import pandas as pd
 import appfunction
 import dash_core_components as dcc
@@ -54,10 +55,16 @@ def get_new_update(period=UPDATE_INTERVAL):
         get_data()
         time.sleep(period)
 
+#set fiscal year (1st apr)
+fiscalyear.START_YEAR = 'same'
+fiscalyear.START_MONTH = 4
+fiscalyear.START_DATE = 1
+year_now = FiscalDate.today().fiscal_year
+
 #List of students
 select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
 select_level = list(select_opt.keys())
-select_sem = ['{}/2018/19'.format(num) for num in range(1,4)]
+select_sem = ['{}/{}/{}'.format(num,year_now,year_now+1) for num in range(1,4)]
 
 #List of subject
 subject = {'TJ':'Tajweed',
