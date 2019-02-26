@@ -154,6 +154,7 @@ def serve_layout():
             dcc.Tab(label='Submit Co-curricular and Extra-curricular (Grade)', value='tab-submit3'),
             dcc.Tab(label='Submit Co-curricular and Extra-curricular (Comments)', value='tab-submit4'),
             dcc.Tab(label='Submit Behaviour or Affectiveness', value='tab-submit5'),
+            dcc.Tab(label='Submit or Update Students Info', value='tab-submit5'),
             ])], className="no-print"),
         html.Div(id='tab-contents')
         ])
@@ -178,6 +179,8 @@ def render_content(tab):
        return submit4.layout
     elif tab == 'tab-submit5':
         return submit5.layout
+    elif tab == 'tab-submit6':
+        return submit6.layout
 
 #selection year
 @app.callback(
