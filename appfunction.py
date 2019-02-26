@@ -78,9 +78,9 @@ def update_name(level,year,name):
         [html.Tr([html.Th(html.P('Current information'),colSpan='3')])] +
         [html.Tr([html.Th(col) for col in ['Name','Level','Year']])] +
         [html.Tr(
-            [html.Td(name)] + [html.Td(level)] + [html.Td(year,style=center)]
+            [html.Td(name)] + [html.Td(level)] + [html.Td(year, style=center)]
             )] +
-        [html.Tr([html.Td('')])] +
+        [html.Tr([html.Td('',colSpan=3)])] +
         [html.Tr([html.Th(html.P('Changes/Input for submission'),colSpan='3')])] +
         [html.Tr(
             [html.Td(name)] + 
@@ -100,6 +100,7 @@ def grades_table(dataframe):
     return html.Table(
     # Header
     [html.Tr([html.Th(col) for col in ['Component','Grade','Marks']])] +
+
     # Body
     [html.Tr(
         [html.Td(sub)] +
@@ -114,6 +115,7 @@ def comments_table(dataframe):
     return html.Table(
     # Header
     [html.Tr([html.Th(col) for col in ['Component','Competency and Accomplishment']])] +
+
     # Body
     [html.Tr(
         [html.Td(sub)] +
@@ -127,6 +129,7 @@ def co_table(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+
         #Body
         [html.Tr(
             [html.Td(num)] +
@@ -144,6 +147,7 @@ def extra_table(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+
         #Body
         [html.Tr(
             [html.Td(num)] +
@@ -161,6 +165,7 @@ def co_comments(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['No.','Component','Competency and Accomplishment']])] +
+
         #Body
         [html.Tr(
             [html.Td(num)] +
@@ -174,6 +179,7 @@ def extra_comments(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['No.','Component','Competency and Accomplishment']])] +
+
         #Body
         [html.Tr(
             [html.Td(num)] +
@@ -187,6 +193,7 @@ def attitude(dataframe):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['Component','Grade']])] +
+
         #Body
         [html.Tr(
             [html.Td(att)] + [html.Td(dataframe[att],style=center)]
@@ -198,6 +205,7 @@ def submit_sub_marks(dataframe,subcode,grade,marks):
     return html.Table(
         #Header
         [html.Tr([html.Th(col) for col in ['Component to Submit','Grade (Before submission)','Marks (Before submission)']])] +
+
         #Body
         [html.Tr(
                 [html.Td(subject.get(subcode))] + 
@@ -218,13 +226,13 @@ def submit_sub_comments(dataframe,subcode,comment):
 
         #Body
         [html.Tr(
-            [html.Td(subject.get(subcode))] + 
-            [html.Td([html.P(value) for index, value in dataframe[comment].str.split('\n',expand=True).items()])]
+                [html.Td(subject.get(subcode))] + 
+                [html.Td([html.P(value) for index, value in dataframe[comment].str.split('\n',expand=True).items()])]
             )
         ] +
         [html.Tr(
-            [html.Td(html.P("Notes/Comments to Submit"))] +
-            [html.Td(html.Div(dcc.Textarea(id='input-comments',placeholder='Enter your notes/comments here..',style={'width': '100%'})))] 
+                [html.Td(html.P("Notes/Comments to Submit"))] +
+                [html.Td(html.Div(dcc.Textarea(id='input-comments',placeholder='Enter your notes/comments here..',style={'width': '100%'})))] 
             )
         ] +
         [html.Tr(
@@ -234,7 +242,7 @@ def submit_sub_comments(dataframe,subcode,comment):
         )
 
 def submit_act_grades(dataframe,num,items):
-    """return table for grades submission 
+    """return table for notes/comments submission 
         of a student based on 
         selected item(co-curricular/extra-curricular)
         and placeholder number"""
@@ -250,9 +258,9 @@ def submit_act_grades(dataframe,num,items):
             [html.Td(dataframe[items + 'P'],style=center)] +
             [html.Td(dataframe[items + 'E'],style=center)] +
             [html.Td(dataframe[items + 'AT'],style=center)] +
-            [html.Td(dataframe[items + 'G'],style=center)]
+            [html.Td(dataframe[items + 'G'],style=center)] 
             )] +
-        [html.Tr([html.Td('')])] +
+        [html.Tr([html.Td('',colSpan='7')])] +
         [html.Tr(html.Th(html.P('Changes/Input for submission'),colSpan='7'))] +
         #Header - submit
         [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
@@ -260,12 +268,12 @@ def submit_act_grades(dataframe,num,items):
         [html.Tr(
             [html.Td(num)] +
             [html.Td(html.Div(dcc.Input(id='input-act-component',type='text')))] +
-    		[html.Td(html.Div(dcc.Input(id='input-act-attendance',type='text')))] + 
+            [html.Td(html.Div(dcc.Input(id='input-act-attendance',type='text')))] +
             [html.Td(html.Div(dcc.Input(id='input-act-participation',type='text')))] +
             [html.Td(html.Div(dcc.Input(id='input-act-effort',type='text')))] +
             [html.Td(html.Div(dcc.Input(id='input-act-attitude',type='text')))] +
             [html.Td(html.Div(dcc.Input(id='input-act-grade',type='text')))]
-        	)] +
+            )] +
         [html.Tr(
             [html.Td(html.Div(html.Button('Submit',id='submit-act-grades-button')),colSpan='2')] +
             [html.Td(html.Div(id='container-act-grades'))]
@@ -287,7 +295,7 @@ def submit_act_comments(dataframe,num,items):
             [html.Td(dataframe[items])] +
             [html.Td(dataframe[items + 'comment'])]
             )] +
-        [html.Tr([html.Td('')])] +
+        [html.Tr([html.Td('',colSpan='3')])] +
         [html.Tr(html.Th(html.P('Changes/Input for submission'),colSpan='3'))] +
         #Header - submit
         [html.Tr([html.Th(col) for col in ['No','Component','Competency and Accomplishment']])] +
@@ -309,6 +317,7 @@ def submit_attitude(dataframe):
         [html.Tr(html.Th(html.P('Changes/Input for submission'),colSpan='3'))] +
         #Header
         [html.Tr([html.Th(col) for col in ['Component','Grade (Before submission)','']])] +
+
         #Body
         [html.Tr(
             [html.Td(html.P('Akhlaq'))] + [html.Td(dataframe['Akhlaq'],style=center)] + 
