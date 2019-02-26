@@ -8,7 +8,7 @@ select_item = list(select_act.keys())
 layout = html.Div(
 		[
 			html.Hr(),
-			html.H5('Report of Co-curricular Activities'),
+			html.H5("Report of Co-curricular Activities"),
 			html.Div(id='display-cc-grade'),
 			html.Hr(),
 			html.H5("Report of Extra-curricular Activities"),
@@ -26,6 +26,6 @@ layout = html.Div(
 				placeholder="Select the placeholder number"
 				),
 			]),
-			html.Div(id='submit-activity-grades')
+			html.Div(id='submit-actgrades')
 		], className="sheet padding-10mm"
 	)
