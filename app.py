@@ -44,7 +44,7 @@ UPDATE_INTERVAL = 30
 #DataFrame spreadsheet
 def get_data():
     #updates the data
-    global df
+    global df, wks
     file = gspread.authorize(credentials)
     sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
     wks = sheet.worksheet("master")
