@@ -391,7 +391,7 @@ def act_comments_submit_table(act, pholder, name):
 @app.callback(
     Output('container-act-comments','children'),
     [Input('submit-act-comments-button','n_clicks'), Input('submit-act-comments-button','n_submit'),
-	Input('name-dropdown','value'),
+    Input('name-dropdown','value'),
     Input('activity-dropdown','value'),
     Input('placeholder-dropdown','value')],
     [State('input-act-comments','value')])
