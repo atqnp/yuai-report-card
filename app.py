@@ -299,8 +299,7 @@ def marks_submit_table(subcode,name):
 #submit1 - update cell (marks)
 @app.callback(
     Output('container-marks','children'),
-    [Input('submit-marks-button','n_clicks'),
-	Input('submit-marks-button','n_submit'),
+    [Input('submit-marks-button','n_clicks'), Input('submit-marks-button','n_submit'),
     Input('name-dropdown','value'),
     Input('subject-dropdown','value')],
     [State('input-marks','value')])
@@ -323,8 +322,7 @@ def comments_submit_table(subcode,name):
 #submit2 - update cell (notes/comments)
 @app.callback(
     Output('container-comments','children'),
-    [Input('submit-comments-button','n_clicks'),
-	Input('submit-comments-button','n_submit'),
+    [Input('submit-comments-button','n_clicks'), Input('submit-comments-button','n_submit'),
     Input('name-dropdown','value'),
     Input('subject-dropdown','value')],
     [State('input-comments','value')])
@@ -357,8 +355,7 @@ def act_grades_submit_table(act, pholder, name):
 #submit3 - update cell (activity grades)
 @app.callback(
     Output('container-act-grades','children'),
-    [Input('submit-act-grades-button','n_clicks'),
-	Input('submit-act-grades-button','n_submit'),
+    [Input('submit-act-grades-button','n_clicks'), Input('submit-act-grades-button','n_submit'),
     Input('name-dropdown','value'), 
     Input('activity-dropdown','value'),
     Input('placeholder-dropdown','value')],
@@ -393,8 +390,7 @@ def act_comments_submit_table(act, pholder, name):
 #submit4 - update cell (activity notes/comments)
 @app.callback(
     Output('container-act-comments','children'),
-    [Input('submit-act-comments-button','n_clicks'),
-    Input('submit-act-comments-button','n_submit'),
+    [Input('submit-act-comments-button','n_clicks'), Input('submit-act-comments-button','n_submit'),
 	Input('name-dropdown','value'),
     Input('activity-dropdown','value'),
     Input('placeholder-dropdown','value')],
@@ -419,8 +415,7 @@ def att_table(name):
 #submit5 - update cell (attitude/behaviour)
 @app.callback(
     Output('container-att','children'),
-    [Input('submit-att-button','n_clicks'),
-	Input('submit-att-button','n_submit'),
+    [Input('submit-att-button','n_clicks'), Input('submit-att-button','n_submit'),
     Input('name-dropdown','value')],
     [State('input-att-1','value'), State('input-att-2','value'), State('input-att-3','value'),
     State('input-att-4','value'), State('input-att-5','value')])
@@ -450,8 +445,7 @@ def display_selection(value,level,year,name):
 #submit6 - new student submission
 @app.callback(
     Output('container-new','children'),
-    [Input('submit-new-button','n_clicks'),
-    Input('submit-new-button','n_submit')],
+    [Input('submit-new-button','n_clicks'), Input('submit-new-button','n_submit')],
     [State('input-name','value'),
     State('input-level','value'),
     State('input-year','value')])
@@ -473,8 +467,7 @@ def submit_name(clicks, submit, name, level, year):
 #submit6 - update student info
 @app.callback(
     Output('container-update','children'),
-    [Input('submit-update-button','n_clicks'),
-    Input('submit-update-button','n_submit'),
+    [Input('submit-update-button','n_clicks'), Input('submit-update-button','n_submit'),
     Input('name-dropdown','value')],
     [State('update-level','value'),
     State('update-year','value')])
