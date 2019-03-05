@@ -66,7 +66,7 @@ def new_name():
             [html.Td(html.Div(dcc.Input(id='input-year',type='text')))]
             )] +
         [html.Tr(
-            [html.Td(html.Div(html.Button('Submit',id='submit-new-button')))]
+            [html.Td(html.Div(html.Button('Submit',id='submit-new')))]
             )] +
         [html.Tr(
             [html.Td(html.Div(id='container-new'),colSpan='3')]
@@ -88,7 +88,7 @@ def update_name(level,year,name):
             [html.Td(html.Div(dcc.Input(id='update-year',type='text')))]
             )] +
         [html.Tr(
-            [html.Td(html.Div(html.Button('Submit',id='submit-update-button')))]
+            [html.Td(html.Div(html.Button('Submit',id='submit-update')))]
             )] +
         [html.Tr(
             [html.Td(html.Div(id='container-update'),colSpan='3')]
@@ -212,7 +212,7 @@ def submit_sub_marks(dataframe,subcode,grade,marks):
                 [html.Td(dataframe[grade],style=center)] +
                 [html.Td(dataframe[marks],style=center)] +
                 [html.Td(html.Div(dcc.Input(id='input-marks',type='number')))] + 
-                [html.Td(html.Div(html.Button('Submit',id='submit-marks-button')))] +
+                [html.Td(html.Div(html.Button('Submit',id='submit-marks')))] +
                 [html.Td(html.Div(id='container-marks'))]
                 )
         ]
@@ -236,7 +236,7 @@ def submit_sub_comments(dataframe,subcode,comment):
             )
         ] +
         [html.Tr(
-            [html.Td(html.Div(html.Button('Submit',id='submit-comments-button')))] +
+            [html.Td(html.Div(html.Button('Submit',id='submit-comments')))] +
             [html.Td(html.Div(id='container-comments'))]
             )]
         )
@@ -275,7 +275,7 @@ def submit_act_grades(dataframe,num,items):
             [html.Td(html.Div(dcc.Input(id='input-act-grade',type='text')))]
             )] +
         [html.Tr(
-            [html.Td(html.Div(html.Button('Submit',id='submit-act-grades-button')),colSpan='2')] +
+            [html.Td(html.Div(html.Button('Submit',id='submit-actgrades')),colSpan='2')] +
             [html.Td(html.Div(id='container-act-grades'))]
         )]
         )
@@ -306,7 +306,7 @@ def submit_act_comments(dataframe,num,items):
             [html.Td(html.Div(dcc.Textarea(id='input-act-comments',placeholder='Enter your notes/comments here..',style={'width': '100%'})))]
             )] +
         [html.Tr(
-            [html.Td(html.Div(html.Button('Submit',id='submit-act-comments-button')),colSpan='2')] +
+            [html.Td(html.Div(html.Button('Submit',id='submit-actcomments')),colSpan='2')] +
             [html.Td(html.Div(id='container-act-comments'))]
         )]
         )
@@ -340,7 +340,7 @@ def submit_attitude(dataframe):
             [html.Td(html.Div(dcc.Input(id='input-att-5',type='text')))]
             )] +
         [html.Tr(
-            [html.Td(html.Div(html.Button('Submit',id='submit-att-button')),colSpan='2')] +
+            [html.Td(html.Div(html.Button('Submit',id='submit-att')),colSpan='2')] +
             [html.Td(html.Div(id='container-att'))]
         )]
         )
@@ -366,37 +366,37 @@ def academic_report(dataframe):
             )] +
         [html.Tr(
             [html.Td(subject['IS'])] + 
-            [html.Td(dataframe['IS_grade'],style=center)] + [html.Td(dataframe['IS_grade'],style=center)] + 
+            [html.Td(dataframe['IS_grade'],style=center)] + [html.Td(dataframe['IS_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['IS_credits'],style=center)]
             )] +
         [html.Tr(
             [html.Td(subject['AR'])] + 
-            [html.Td(dataframe['AR_grade'],style=center)] + [html.Td(dataframe['AR_grade'],style=center)] + 
+            [html.Td(dataframe['AR_grade'],style=center)] + [html.Td(dataframe['AR_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['AR_credits'],style=center)] 
             )] +
         [html.Tr(
             [html.Td(subject['EN'])] + 
-            [html.Td(dataframe['EN_grade'],style=center)] + [html.Td(dataframe['EN_grade'],style=center)] + 
+            [html.Td(dataframe['EN_grade'],style=center)] + [html.Td(dataframe['EN_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['EN_credits'],style=center)]
             )] +
         [html.Tr(
             [html.Td(subject['JP'])] + 
-            [html.Td(dataframe['JP_grade'],style=center)] + [html.Td(dataframe['JP_grade'],style=center)] + 
+            [html.Td(dataframe['JP_grade'],style=center)] + [html.Td(dataframe['JP_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['JP_credits'],style=center)]
             )] +
         [html.Tr(
             [html.Td(subject['MT'])] + 
-            [html.Td(dataframe['MT_grade'],style=center)] + [html.Td(dataframe['MT_grade'],style=center)] + 
+            [html.Td(dataframe['MT_grade'],style=center)] + [html.Td(dataframe['MT_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['MT_credits'],style=center)]
             )] +
         [html.Tr(
             [html.Td(subject['SC'])] + 
-            [html.Td(dataframe['SC_grade'],style=center)] + [html.Td(dataframe['SC_grade'],style=center)] + 
+            [html.Td(dataframe['SC_grade'],style=center)] + [html.Td(dataframe['SC_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['SC_credits'],style=center)]
             )] +
@@ -414,25 +414,25 @@ def academic_report(dataframe):
             )] +
         [html.Tr(
             [html.Td(subject['IT'])] + 
-            [html.Td(dataframe['IT_grade'],style=center)] + [html.Td(dataframe['IT_grade'],style=center)] + 
+            [html.Td(dataframe['IT_grade'],style=center)] + [html.Td(dataframe['IT_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['IT_credits'],style=center)]
             )] +
         [html.Tr(
             [html.Td(subject['SS'])] + 
-            [html.Td(dataframe['SS_grade'],style=center)] + [html.Td(dataframe['SS_grade'],style=center)] + 
+            [html.Td(dataframe['SS_grade'],style=center)] + [html.Td(dataframe['SS_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['SS_credits'],style=center)]
             )] +
         [html.Tr(
             [html.Td(subject['GE'])] + 
-            [html.Td(dataframe['GE_grade'],style=center)] + [html.Td(dataframe['GE_grade'],style=center)] + 
+            [html.Td(dataframe['GE_grade'],style=center)] + [html.Td(dataframe['GE_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['GE_credits'],style=center)]
             )] +
         [html.Tr(
             [html.Td(subject['ART'])] + 
-            [html.Td(dataframe['ART_grade'],style=center)] + [html.Td(dataframe['ART_grade'],style=center)] + 
+            [html.Td(dataframe['ART_grade'],style=center)] + [html.Td(dataframe['ART_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['ART_credits'],style=center)]
             )]
