@@ -11,7 +11,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from oauth2client.service_account import ServiceAccountCredentials
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-from apps import report, submit1, submit2, submit3, submit4, submit5, submit6
+from apps import report, submit1, submit2, submit3, submit4, submit5, submit6, submit7
 
 scope = ['https://spreadsheets.google.com/feeds',
 		 'https://www.googleapis.com/auth/drive']
@@ -155,7 +155,8 @@ def serve_layout():
             dcc.Tab(label='Submit Co-curricular and Extra-curricular (Grade)', value='tab-submit3'),
             dcc.Tab(label='Submit Co-curricular and Extra-curricular (Comments)', value='tab-submit4'),
             dcc.Tab(label='Submit Behaviour or Affectiveness', value='tab-submit5'),
-            dcc.Tab(label='Submit or Update Students Info', value='tab-submit5'),
+            dcc.Tab(label='Submit or Update Students Info', value='tab-submit6'),
+			dcc.Tab(label='Submit Attendance', value='tab-submit7'),
             ])], className="no-print"),
         html.Div(id='tab-contents')
         ])
@@ -182,6 +183,8 @@ def render_content(tab):
         return submit5.layout
     elif tab == 'tab-submit6':
         return submit6.layout
+	elif tab == 'tab-submit7':
+        return submit7.layout
 
 #selection year
 @app.callback(
@@ -237,6 +240,21 @@ def display_grade(name):
 def display_fullgrade(name):
     dfi = df[df.Name.isin([name])]
     return appfunction.academic_report(dfi)
+
+#full report page - attendance table
+@app.callback(
+    Output('display-attendance','children'),
+    [Input('name-dropdown','value'),
+	Input('semester-dropdown','value')])
+def display_attendance(name, sem):
+    dfi = df[df.Name.isin([name])]
+	if sem == '1/{}/{}'.format(year_now,year_now+1):
+		period = 'APRIL - JULY {}'.format(year_now)
+	elif sem == '2/{}/{}'.format(year_now,year_now+1:
+		period = 'SEPTEMBER - DECEMBER {}'.format(year_now)
+	elif sem == '3/{}/{}'.format(year_now,year_now+1):
+		period = 'JANUARY - MARCH {}'.format(year_now+1)
+    return appfunction.attendance(dfi,period)
 
 #full report page - academic teacher's note table
 @app.callback(
@@ -484,5 +502,31 @@ def submit_update(clicks, submit, name, level, year):
     wks.update_cell(sub_row, 2, level)
     wks.update_cell(sub_row, 3, year)
 
+#submit7 - selected name for submitting (attendance table output)
+@app.callback(
+    Output('submit-attendance','children'),
+    [Input('name-dropdown','value')])
+def attendance_submit_table(name):
+    dfi = df[df.Name.isin([name])]
+    return appfunction.submit_attendance(dfi)
+
+#submit7 - update cell (attendance)
+@app.callback(
+    Output('container-attendance','children'),
+    [Input('submit-attendance-button','n_clicks'),
+    Input('submit-attendance-button','n_submit'),
+    Input('name-dropdown','value')],
+    [State('input-attend-1','value'), 
+    State('input-attend-2','value'), 
+    State('input-attend-3','value'),
+	State('input-attend-4','value')])
+def submit_attitde(clicks, submit, name, val1, val2, val3, val4):
+    works = appfunction.access_wsheet('attendance')
+    sub_row = works.find(name).row
+    works.update_cell(sub_row, works.find('School days').col, val1)
+    works.update_cell(sub_row, works.find('Days of late').col, val2)
+    works.update_cell(sub_row, works.find('Days of absent').col, val3)
+	works.update_cell(sub_row, works.find('Leaving early').col, val4)
+	
 if __name__ == '__main__':
     app.run_server(debug=True)
