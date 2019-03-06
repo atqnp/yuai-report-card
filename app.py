@@ -179,7 +179,7 @@ def render_content(tab):
         return submit5.layout
     elif tab == 'tab-submit6':
         return submit6.layout
-	elif tab == 'tab-submit7':
+    elif tab == 'tab-submit7':
         return submit7.layout
 
 #selection year
