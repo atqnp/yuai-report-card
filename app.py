@@ -80,6 +80,7 @@ subject = {'TJ':'Tajweed',
             'IT':'Information and Communication in Technology',
             'SS':'Social Study',
             'GE':'Geography',
+		    'PM':'Public Moral',
             'ART':'Art'}
 
 sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
