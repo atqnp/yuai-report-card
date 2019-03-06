@@ -520,8 +520,8 @@ def submit_attitde(clicks, submit, name, val1, val2, val3, val4):
     works = appfunction.access_wsheet('attendance')
     sub_row = works.find(name).row
     works.update_cell(sub_row, works.find('School days').col, val1)
-    works.update_cell(sub_row, works.find('Days of late').col, val2)
-    works.update_cell(sub_row, works.find('Days of absent').col, val3)
+    works.update_cell(sub_row, works.find('Absence').col, val2)
+    works.update_cell(sub_row, works.find('Coming late').col, val3)
     works.update_cell(sub_row, works.find('Leaving early').col, val4)
     
 if __name__ == '__main__':
