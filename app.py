@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from apps import report, submit1, submit2, submit3, submit4, submit5, submit6, submit7
 
 scope = ['https://spreadsheets.google.com/feeds',
-		 'https://www.googleapis.com/auth/drive']
+         'https://www.googleapis.com/auth/drive']
 
 SHEET_PRIVATE_KEY = os.environ['SHEET_PRIVATE_KEY']
 SHEET_PRIVATE_KEY = SHEET_PRIVATE_KEY.replace('\\n', '\n')
@@ -80,7 +80,7 @@ subject = {'TJ':'Tajweed',
             'IT':'Information and Communication in Technology',
             'SS':'Social Study',
             'GE':'Geography',
-		    'PM':'Public Moral',
+            'PM':'Public Moral',
             'ART':'Art'}
 
 #List of co and extra curricular
@@ -97,7 +97,7 @@ app.index_string = '''
 <!DOCTYPE html>
 <html>
     <head>
-    	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Harmattan">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Harmattan">
         {%metas%}
         <title>YUAI - Report Card</title>
         {%favicon%}
@@ -152,7 +152,7 @@ def serve_layout():
             dcc.Tab(label='Submit Co-curricular and Extra-curricular (Comments)', value='tab-submit4'),
             dcc.Tab(label='Submit Behaviour or Affectiveness', value='tab-submit5'),
             dcc.Tab(label='Submit or Update Students Info', value='tab-submit6'),
-			dcc.Tab(label='Submit Attendance', value='tab-submit7'),
+            dcc.Tab(label='Submit Attendance', value='tab-submit7'),
             ])], className="no-print"),
         html.Div(id='tab-contents')
         ])
@@ -241,15 +241,15 @@ def display_fullgrade(name):
 @app.callback(
     Output('display-attendance','children'),
     [Input('name-dropdown','value'),
-	Input('semester-dropdown','value')])
+    Input('semester-dropdown','value')])
 def display_attendance(name, sem):
     dfi = df[df.Name.isin([name])]
-	if sem == '1/{}/{}'.format(year_now,year_now+1):
-		period = 'APRIL - JULY {}'.format(year_now)
-	elif sem == '2/{}/{}'.format(year_now,year_now+1):
-		period = 'SEPTEMBER - DECEMBER {}'.format(year_now)
+    if sem == '1/{}/{}'.format(year_now,year_now+1):
+        period = 'APRIL - JULY {}'.format(year_now)
+    elif sem == '2/{}/{}'.format(year_now,year_now+1):
+        period = 'SEPTEMBER - DECEMBER {}'.format(year_now)
     elif sem == '3/{}/{}'.format(year_now,year_now+1):
-		period = 'JANUARY - MARCH {}'.format(year_now+1)
+        period = 'JANUARY - MARCH {}'.format(year_now+1)
     return appfunction.attendance(dfi,period)
 
 #full report page - academic teacher's note table
@@ -315,7 +315,7 @@ def marks_submit_table(subcode, name):
 @app.callback(
     Output('container-marks','children'),
     [Input('submit-marks','n_clicks'), 
-	 Input('submit-marks','n_submit'),
+     Input('submit-marks','n_submit'),
     Input('name-dropdown','value'),
     Input('subject-dropdown','value')],
     [State('input-marks','value')])
@@ -339,7 +339,7 @@ def comments_submit_table(subcode,name):
 @app.callback(
     Output('container-comments','children'),
     [Input('submit-comments','n_clicks'), 
-	Input('submit-comments','n_submit'),
+    Input('submit-comments','n_submit'),
     Input('name-dropdown','value'),
     Input('subject-dropdown','value')],
     [State('input-comments','value')])
@@ -373,7 +373,7 @@ def act_grades_submit_table(act, pholder, name):
 @app.callback(
     Output('container-act-grades','children'),
     [Input('submit-actgrades','n_clicks'), 
-	Input('submit-actgrades','n_submit'),
+    Input('submit-actgrades','n_submit'),
     Input('name-dropdown','value'), 
     Input('activity-dropdown','value'),
     Input('placeholder-dropdown','value')],
@@ -409,7 +409,7 @@ def act_comments_submit_table(act, pholder, name):
 @app.callback(
     Output('container-act-comments','children'),
     [Input('submit-act-com','n_clicks'), 
-	Input('submit-act-com','n_submit'),
+    Input('submit-act-com','n_submit'),
     Input('name-dropdown','value'),
     Input('activity-dropdown','value'),
     Input('placeholder-dropdown','value')],
@@ -435,7 +435,7 @@ def att_table(name):
 @app.callback(
     Output('container-att','children'),
     [Input('submit-att','n_clicks'), 
-	Input('submit-att','n_submit'),
+    Input('submit-att','n_submit'),
     Input('name-dropdown','value')],
     [State('input-att-1','value'), State('input-att-2','value'), State('input-att-3','value'),
     State('input-att-4','value'), State('input-att-5','value')])
@@ -466,7 +466,7 @@ def display_selection(value, level, year, name):
 @app.callback(
     Output('container-new','children'),
     [Input('submit-new','n_clicks'), 
-	Input('submit-new','n_submit')],
+    Input('submit-new','n_submit')],
     [State('input-name','value'),
     State('input-level','value'),
     State('input-year','value')])
@@ -489,7 +489,7 @@ def submit_name(clicks, submit, name, level, year):
 @app.callback(
     Output('container-update','children'),
     [Input('submit-update','n_clicks'), 
-	Input('submit-update','n_submit'),
+    Input('submit-update','n_submit'),
     Input('name-dropdown','value')],
     [State('update-level','value'),
     State('update-year','value')])
@@ -515,7 +515,7 @@ def attendance_submit_table(name):
     [State('input-attend-1','value'), 
     State('input-attend-2','value'), 
     State('input-attend-3','value'),
-	State('input-attend-4','value')])
+    State('input-attend-4','value')])
 def submit_attitde(clicks, submit, name, val1, val2, val3, val4):
     works = appfunction.access_wsheet('attendance')
     sub_row = works.find(name).row
@@ -523,6 +523,6 @@ def submit_attitde(clicks, submit, name, val1, val2, val3, val4):
     works.update_cell(sub_row, works.find('Days of late').col, val2)
     works.update_cell(sub_row, works.find('Days of absent').col, val3)
     works.update_cell(sub_row, works.find('Leaving early').col, val4)
-	
+    
 if __name__ == '__main__':
     app.run_server(debug=True)
