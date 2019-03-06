@@ -22,7 +22,7 @@ subject = {'TJ':'Tajweed',
             'IT':'Information and Communication in Technology',
             'SS':'Social Study',
             'GE':'Geography',
-		    'PM':'Public Moral',
+            'PM':'Public Moral',
             'ART':'Art'}
 
 sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
@@ -349,7 +349,7 @@ def submit_attitude(dataframe):
 def academic_report(dataframe):
     return html.Table(
         #Header
-        [html.Tr([html.Th('Component', rowSpan='2'),html.Th('Cognitive',colSpan='2'),html.Th('Practical',colSpan='2'))])] +
+        [html.Tr([html.Th('Component', rowSpan='2'),html.Th('Cognitive',colSpan='2'),html.Th('Practical',colSpan='2')])] +
         [html.Tr([html.Th('Grade'),html.Th('Marks'),html.Th('Grade'),html.Th('Marks')])] +
         [html.Tr([html.Td('Academics',colSpan='6')])] +
         #Body
