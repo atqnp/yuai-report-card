@@ -22,6 +22,7 @@ subject = {'TJ':'Tajweed',
             'IT':'Information and Communication in Technology',
             'SS':'Social Study',
             'GE':'Geography',
+		    'PM':'Public Moral',
             'ART':'Art'}
 
 sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
@@ -429,6 +430,12 @@ def academic_report(dataframe):
             [html.Td(dataframe['GE_grade'],style=center)] + [html.Td(dataframe['GE_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['GE_credits'],style=center)]
+            )] +
+        [html.Tr(
+            [html.Td(subject['PM'])] + 
+            [html.Td(dataframe['PM_grade'],style=center)] + [html.Td(dataframe['PM_marks'],style=center)] + 
+            [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
+            [html.Td(dataframe['PM_credits'],style=center)]
             )] +
         [html.Tr(
             [html.Td(subject['ART'])] + 
