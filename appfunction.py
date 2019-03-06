@@ -201,6 +201,18 @@ def attitude(dataframe):
             ) for att in ['Akhlaq','Discipline','Diligent','Interaction','Respect']]
         )
 
+def attendance(dataframe,period):
+    '''return table for attendance'''
+    return html.Table(
+        #Header
+        [html.Tr([html.Th(col) for col in ['MONTH',period]])] +
+        #Body
+        [html.Tr([html.Td('School days')] + [html.Td(dataframe['School days'],style=center)] +
+        [html.Tr([html.Td('Days of late')] + [html.Td(dataframe['Days of late'],style=center)])] +
+        [html.Tr([html.Td('Days of late')] + [html.Td(dataframe['Days of late'],style=center)])] +
+        [html.Tr([html.Td('Leaving early')] + [html.Td(dataframe['Leaving early'],style=center)])]
+        )
+
 def submit_sub_marks(dataframe,subcode,grade,marks):
     """return table for marks submission of a student based on selected subject"""
     return html.Table(
@@ -343,6 +355,34 @@ def submit_attitude(dataframe):
         [html.Tr(
             [html.Td(html.Div(html.Button('Submit',id='submit-att')),colSpan='2')] +
             [html.Td(html.Div(id='container-att'))]
+        )]
+        )
+
+def submit_attendance(dataframe):
+    '''return table for attendance submission'''
+    return html.Table(
+        #Header
+        [html.Tr([html.Th(col) for col in ['Component','Data before submission','Input data']])] +
+        #Body
+        [html.Tr(
+            [html.Td(html.P('School days'))] + [html.Td(dataframe['School days'],style=center)] + 
+            [html.Td(html.Div(dcc.Input(id='input-attend-1',type='number',placeholder='Input value here..')))]
+            )] +
+        [html.Tr(
+            [html.Td(html.P('Days of late'))] + [html.Td(dataframe['Days of late'],style=center)] + 
+            [html.Td(html.Div(dcc.Input(id='input-attend-2',type='number',placeholder='Input value here..')))]
+            )] +
+        [html.Tr(
+            [html.Td(html.P('Days of absent'))] + [html.Td(dataframe['Days of absent'],style=center)] + 
+            [html.Td(html.Div(dcc.Input(id='input-attend-3',type='number',placeholder='Input value here..')))]
+            )] +
+        [html.Tr(
+            [html.Td(html.P('Leaving early'))] + [html.Td(dataframe['Leaving early'],style=center)] + 
+            [html.Td(html.Div(dcc.Input(id='input-attend-4',type='number',placeholder='Input value here..')))]
+            )] +
+        [html.Tr(
+            [html.Td(html.Div(html.Button('Submit',id='submit-attendance-button')),colSpan='2')] +
+            [html.Td(html.Div(id='container-attendance'))]
         )]
         )
 
