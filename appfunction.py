@@ -208,8 +208,8 @@ def attendance(dataframe,period):
         [html.Tr([html.Th(col) for col in ['MONTH',period]])] +
         #Body
         [html.Tr([html.Td('School days')] + [html.Td(dataframe['School days'],style=center)])] +
-        [html.Tr([html.Td('Days of late')] + [html.Td(dataframe['Days of late'],style=center)])] +
-        [html.Tr([html.Td('Days of late')] + [html.Td(dataframe['Days of late'],style=center)])] +
+        [html.Tr([html.Td('Absence')] + [html.Td(dataframe['Absence'],style=center)])] +
+        [html.Tr([html.Td('Coming late')] + [html.Td(dataframe['Coming late'],style=center)])] +
         [html.Tr([html.Td('Leaving early')] + [html.Td(dataframe['Leaving early'],style=center)])]
         )
 
@@ -369,11 +369,11 @@ def submit_attendance(dataframe):
             [html.Td(html.Div(dcc.Input(id='input-attend-1',type='number',placeholder='Input value here..')))]
             )] +
         [html.Tr(
-            [html.Td(html.P('Days of late'))] + [html.Td(dataframe['Days of late'],style=center)] + 
+            [html.Td(html.P('Absence'))] + [html.Td(dataframe['Absence'],style=center)] + 
             [html.Td(html.Div(dcc.Input(id='input-attend-2',type='number',placeholder='Input value here..')))]
             )] +
         [html.Tr(
-            [html.Td(html.P('Days of absent'))] + [html.Td(dataframe['Days of absent'],style=center)] + 
+            [html.Td(html.P('Coming late'))] + [html.Td(dataframe['Coming late'],style=center)] + 
             [html.Td(html.Div(dcc.Input(id='input-attend-3',type='number',placeholder='Input value here..')))]
             )] +
         [html.Tr(
