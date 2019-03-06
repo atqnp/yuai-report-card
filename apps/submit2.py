@@ -4,19 +4,20 @@ import dash_html_components as html
 
 #List of subject
 subject = {'TJ':'Tajweed',
-			'TF':'Tahfidz',
-			'IS':'Islamic Studies',
-			'AR':'Arabic',
-			'EN':'English',
-			'JP':'Japanese',
-			'MT':'Mathematics',
-			'SC':'Science',
-			'PE':'Physical Education',
-			'LS':'Living Skill',
-			'IT':'Information and Communication in Technology',
-			'SS':'Social Study',
-			'GE':'Geography',
-			'ART':'Art'}
+            'TF':'Tahfidz',
+            'IS':'Islamic Studies',
+            'AR':'Arabic',
+            'EN':'English',
+            'JP':'Japanese',
+            'MT':'Mathematics',
+            'SC':'Science',
+            'PE':'Physical Education',
+            'LS':'Living Skill',
+            'IT':'Information and Communication in Technology',
+            'SS':'Social Study',
+            'GE':'Geography',
+		    'PM':'Public Moral',
+            'ART':'Art'}
 
 sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
 sub_marks = ['{}_marks'.format(sub) for sub in subject.keys()]
