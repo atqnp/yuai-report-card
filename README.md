@@ -2,6 +2,10 @@
 
 Report card application for YUAI International Islamic School
 
+ver 1.3 (2019-03-06)
+--------------------
+- added attendance 
+
 ver 1.1 (2019-02-26)
 --------------------
 - bug fixes
