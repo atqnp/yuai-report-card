@@ -83,10 +83,6 @@ subject = {'TJ':'Tajweed',
 		    'PM':'Public Moral',
             'ART':'Art'}
 
-sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
-sub_marks = ['{}_marks'.format(sub) for sub in subject.keys()]
-sub_com = ['{}_comments'.format(sub) for sub in subject.keys()]
-
 #List of co and extra curricular
 select_act = {'Co-Curricular' : list(range(1,6)), 'Extra-Curricular' : list(range(1,4))}
 select_item = list(select_act.keys())
@@ -250,9 +246,9 @@ def display_attendance(name, sem):
     dfi = df[df.Name.isin([name])]
 	if sem == '1/{}/{}'.format(year_now,year_now+1):
 		period = 'APRIL - JULY {}'.format(year_now)
-	elif sem == '2/{}/{}'.format(year_now,year_now+1:
+	elif sem == '2/{}/{}'.format(year_now,year_now+1):
 		period = 'SEPTEMBER - DECEMBER {}'.format(year_now)
-	elif sem == '3/{}/{}'.format(year_now,year_now+1):
+    elif sem == '3/{}/{}'.format(year_now,year_now+1):
 		period = 'JANUARY - MARCH {}'.format(year_now+1)
     return appfunction.attendance(dfi,period)
 
