@@ -8,7 +8,9 @@ layout = html.Div(
                 html.Div(id='display-student-info'),
                 html.Hr(),
                 html.H6('Academics Achievement'),
-                html.Div(id='display-report')
+                html.Div(id='display-report'),
+                html.Hr(),
+                html.Div(id='display-attendance'),
                 ], className="sheet padding-10mm"),
             html.Section([
                 html.H6("Academics Achievement - Teacher's Note"),
