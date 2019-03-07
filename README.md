@@ -2,6 +2,11 @@
 
 Report card application for YUAI International Islamic School
 
+ver 1.3.2 (2019-03-07)
+--------------------
+- typography error fixed
+- bug fixes
+
 ver 1.3.1 (2019-03-06)
 --------------------
 - bug fixes 
