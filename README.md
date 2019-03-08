@@ -1,6 +1,9 @@
 # yuai-report-card
 
 Report card application for YUAI International Islamic School
+ver 1.4.2 (2019-03-09)
+--------------------
+- bug fixes
 
 ver 1.4.1 (2019-03-09)
 --------------------
