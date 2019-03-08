@@ -7,7 +7,6 @@ layout = html.Div(
             html.Section([
                 html.Div(id='display-student-info'),
                 html.Hr(),
-                html.H6('Academics Achievement'),
                 html.Div(id='display-report'),
                 html.Hr(),
                 html.Div(id='display-attendance'),
