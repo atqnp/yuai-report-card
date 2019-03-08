@@ -215,11 +215,7 @@ def display_value(level,year,name):
     Input('name-dropdown','value'),
     Input('semester-dropdown','value')])
 def display_info(level,year,name,sem):
-    return html.Div([html.P('Name : {}'.format(name)),
-        html.Br(), html.P('Level : {}'.format(level)),
-        html.Br(), html.P('Year : {}'.format(year)),
-        html.Br(), html.P('Semester : {}'.format(sem)),
-        ])
+    return appfunction.student_info(name,level,year,sem)
 
 #full report page - grades and marks table
 @app.callback(
