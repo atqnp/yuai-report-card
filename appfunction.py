@@ -162,7 +162,7 @@ def co_table(dataframe):
             [html.Td(dataframe['CC{}E'.format(num)],style=center)] +
             [html.Td(dataframe['CC{}AT'.format(num)],style=center)] +
             [html.Td(dataframe['CC{}G'.format(num)],style=center)]
-            ) for num in range(1,6)]
+            ) for num in range(1,6)], className="fulltable"
             )
 
 def extra_table(dataframe):
@@ -180,7 +180,7 @@ def extra_table(dataframe):
             [html.Td(dataframe['extraCC{}E'.format(num)],style=center)] +
             [html.Td(dataframe['extraCC{}AT'.format(num)],style=center)] +
             [html.Td(dataframe['extraCC{}G'.format(num)],style=center)]
-            ) for num in range(1,4)]
+            ) for num in range(1,4)], className="fulltable"
         )
 
 def co_comments(dataframe):
@@ -194,7 +194,7 @@ def co_comments(dataframe):
             [html.Td(num)] +
             [html.Td(dataframe['CC{}'.format(num)])] +
             [html.Td(dataframe['CC{}comment'.format(num)])]
-            ) for num in range(1,6)]
+            ) for num in range(1,6)], className="fulltable"
         )
 
 def extra_comments(dataframe):
@@ -208,7 +208,7 @@ def extra_comments(dataframe):
             [html.Td(num)] +
             [html.Td(dataframe['extraCC{}'.format(num)])] +
             [html.Td(dataframe['extraCC{}comment'.format(num)])]
-            ) for num in range(1,4)]
+            ) for num in range(1,4)], className="fulltable"
         )
 
 def attitude(dataframe):
@@ -218,7 +218,7 @@ def attitude(dataframe):
         #Body
         [html.Tr(
             [html.Td(no,style=center)] + [html.Td(att,style=center)] + [html.Td(dataframe[att],style=center)]
-            ) for no,att in zip(list(range(1,len(attlist)+1)),attlist)],className="widetable"
+            ) for no,att in zip(list(range(1,len(attlist)+1)),attlist)],className="narrowtable"
         )
 
 def attendance(dataframe,period):
