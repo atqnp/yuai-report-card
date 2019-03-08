@@ -300,6 +300,26 @@ def display_attitude(name):
     dfi = df[df.Name.isin([name])]
     return appfunction.attitude(dfi)
 
+#full report page - teacher
+@app.callback(
+    Output('display-teacher','children'),
+    [Input('name-dropdown','value')])
+def display_attitude(name):
+    return html.Div([html.P('Homeroom Teacher:'),
+        html.Br(), html.Br(), html.Br() html.Br(), html.Br(),
+        html.P('_________________')
+        ])
+
+#full report page - parent
+@app.callback(
+    Output('display-parents','children'),
+    [Input('name-dropdown','value')])
+def display_attitude(name):
+    return html.Div([html.P('Parent:'),
+        html.Br(), html.Br(), html.Br() html.Br(), html.Br(),
+        html.P('_________________')
+        ])
+
 #submit1 - selected subject for submitting (marks table output)
 @app.callback(
     Output('submit-subject-marks','children'),
@@ -521,7 +541,7 @@ def submit_attitde(clicks, submit, name, val1, val2, val3, val4):
     sub_row = works.find(name).row
     works.update_cell(sub_row, works.find('School days').col, val1)
     works.update_cell(sub_row, works.find('Absence').col, val2)
-    works.update_cell(sub_row, works.find('Coming late').col, val3)
+    works.update_cell(sub_row, works.find('Coming').col, val3)
     works.update_cell(sub_row, works.find('Leaving early').col, val4)
     
 if __name__ == '__main__':

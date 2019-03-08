@@ -96,6 +96,27 @@ def update_name(level,year,name):
             )]
         )
 
+def student_info(name,level,year,sem):
+    return html.Table(
+        [html.Tr([html.Td('Name',className="no-border")] + 
+            [html.Td(':',style=center,className="no-border")] + 
+            [html.Td(name,className="no-border")]
+            )] +
+        [html.Tr([html.Td('Level',className="no-border")] + 
+            [html.Td(':',style=center,className="no-border")] + 
+            [html.Td(level,className="no-border")]
+            )] +
+        [html.Tr([html.Td('Year',className="no-border")] + 
+            [html.Td(':',style=center,className="no-border")] + 
+            [html.Td(year,className="no-border")]
+            )] +
+        [html.Tr([html.Td('Semester',className="no-border")] + 
+            [html.Td(':',style=center,className="no-border")] + 
+            [html.Td(sem,className="no-border")]
+            )], 
+        className="no-border"
+        )
+
 def grades_table(dataframe):
     """return table for marks and grades of a student"""
     return html.Table(
@@ -115,14 +136,15 @@ def comments_table(dataframe):
     """return table for notes/comments of a student"""
     return html.Table(
     # Header
-    [html.Tr([html.Th(col) for col in ['Component','Competency and Accomplishment']])] +
+    [html.Tr([html.Th(col) for col in ['No','Component','Competency and Accomplishment']])] +
 
     # Body
     [html.Tr(
+        [html.Td(no)] +
         [html.Td(sub)] +
         [html.Td([html.P(value) for index, value in dataframe[comments].str.split('\n',expand=True).items()])]
-        ) for sub,comments in zip(subject.values(),sub_com)
-    ]
+        ) for no,sub,comments in zip(list(range(1,len(sub_com)+1)),subject.values(),sub_com)
+    ],className="fulltable"
     )
 
 def co_table(dataframe):
@@ -140,7 +162,7 @@ def co_table(dataframe):
             [html.Td(dataframe['CC{}E'.format(num)],style=center)] +
             [html.Td(dataframe['CC{}AT'.format(num)],style=center)] +
             [html.Td(dataframe['CC{}G'.format(num)],style=center)]
-            ) for num in range(1,6)]
+            ) for num in range(1,6)],className="widetable"
             )
 
 def extra_table(dataframe):
@@ -158,7 +180,7 @@ def extra_table(dataframe):
             [html.Td(dataframe['extraCC{}E'.format(num)],style=center)] +
             [html.Td(dataframe['extraCC{}AT'.format(num)],style=center)] +
             [html.Td(dataframe['extraCC{}G'.format(num)],style=center)]
-            ) for num in range(1,4)]
+            ) for num in range(1,4)],className="widetable"
         )
 
 def co_comments(dataframe):
@@ -172,7 +194,7 @@ def co_comments(dataframe):
             [html.Td(num)] +
             [html.Td(dataframe['CC{}'.format(num)])] +
             [html.Td(dataframe['CC{}comment'.format(num)])]
-            ) for num in range(1,6)]
+            ) for num in range(1,6)],className="widetable"
         )
 
 def extra_comments(dataframe):
@@ -186,19 +208,17 @@ def extra_comments(dataframe):
             [html.Td(num)] +
             [html.Td(dataframe['extraCC{}'.format(num)])] +
             [html.Td(dataframe['extraCC{}comment'.format(num)])]
-            ) for num in range(1,4)]
+            ) for num in range(1,4)],className="widetable"
         )
 
 def attitude(dataframe):
     """return table for attitude grades of a student"""
+    attlist = ['Akhlaq','Discipline','Diligent','Interaction','Respect']
     return html.Table(
-        #Header
-        [html.Tr([html.Th(col) for col in ['Component','Grade']])] +
-
         #Body
         [html.Tr(
-            [html.Td(att)] + [html.Td(dataframe[att],style=center)]
-            ) for att in ['Akhlaq','Discipline','Diligent','Interaction','Respect']]
+            [html.Td(no,style=center)] + [html.Td(att,style=center)] + [html.Td(dataframe[att],style=center)]
+            ) for no,att in zip(list(range(1,len(attlist)+1)),attlist)],className="widetable"
         )
 
 def attendance(dataframe,period):
@@ -210,7 +230,8 @@ def attendance(dataframe,period):
         [html.Tr([html.Td('School days')] + [html.Td(dataframe['School days'],style=center)])] +
         [html.Tr([html.Td('Absence')] + [html.Td(dataframe['Absence'],style=center)])] +
         [html.Tr([html.Td('Coming late')] + [html.Td(dataframe['Coming late'],style=center)])] +
-        [html.Tr([html.Td('Leaving early')] + [html.Td(dataframe['Leaving early'],style=center)])]
+        [html.Tr([html.Td('Leaving early')] + [html.Td(dataframe['Leaving early'],style=center)])],
+        className="widetable"
         )
 
 def submit_sub_marks(dataframe,subcode,grade,marks):
@@ -389,83 +410,98 @@ def submit_attendance(dataframe):
 def academic_report(dataframe):
     return html.Table(
         #Header
-        [html.Tr([html.Th('Component', rowSpan='2'),html.Th('Cognitive',colSpan='2'),html.Th('Practical',colSpan='2')])] +
+        [html.Tr([html.Th('No'),html.Th('Component', rowSpan='2'),html.Th('Cognitive',colSpan='2'),html.Th('Practical',colSpan='2')])] +
         [html.Tr([html.Th('Grade'),html.Th('Marks'),html.Th('Grade'),html.Th('Marks')])] +
         [html.Tr([html.Td('Academics',colSpan='6')])] +
         #Body
         [html.Tr(
+            [html.Td('1')] +
             [html.Td(subject['TJ'])] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['TJ_grade'],style=center)] + [html.Td(dataframe['TJ_marks'],style=center)]
             )] +
         [html.Tr(
+            [html.Td('2')] +
             [html.Td(subject['TF'])] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['TF_grade'],style=center)] + [html.Td(dataframe['TF_marks'],style=center)]
             )] +
         [html.Tr(
+            [html.Td('3')] +
             [html.Td(subject['IS'])] + 
             [html.Td(dataframe['IS_grade'],style=center)] + [html.Td(dataframe['IS_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] 
             )] +
         [html.Tr(
+            [html.Td('4')] +
             [html.Td(subject['AR'])] + 
             [html.Td(dataframe['AR_grade'],style=center)] + [html.Td(dataframe['AR_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )] +
         [html.Tr(
+            [html.Td('5')] +
             [html.Td(subject['EN'])] + 
             [html.Td(dataframe['EN_grade'],style=center)] + [html.Td(dataframe['EN_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )] +
         [html.Tr(
+            [html.Td('6')] +
             [html.Td(subject['JP'])] + 
             [html.Td(dataframe['JP_grade'],style=center)] + [html.Td(dataframe['JP_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )] +
         [html.Tr(
+            [html.Td('7')] +
             [html.Td(subject['MT'])] + 
             [html.Td(dataframe['MT_grade'],style=center)] + [html.Td(dataframe['MT_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )] +
         [html.Tr(
+            [html.Td('8')] +
             [html.Td(subject['SC'])] + 
             [html.Td(dataframe['SC_grade'],style=center)] + [html.Td(dataframe['SC_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )] +
         [html.Tr(
+            [html.Td('9')] +
             [html.Td(subject['PE'])] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['PE_grade'],style=center)] + [html.Td(dataframe['PE_marks'],style=center)]
             )] +
         [html.Tr(
+            [html.Td('10')] +
             [html.Td(subject['LS'])] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['LS_grade'],style=center)] + [html.Td(dataframe['LS_marks'],style=center)]
             )] +
         [html.Tr(
+            [html.Td('11')] +
             [html.Td(subject['IT'])] + 
             [html.Td(dataframe['IT_grade'],style=center)] + [html.Td(dataframe['IT_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )] +
         [html.Tr(
+            [html.Td('12')] +
             [html.Td(subject['SS'])] + 
             [html.Td(dataframe['SS_grade'],style=center)] + [html.Td(dataframe['SS_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )] +
         [html.Tr(
+            [html.Td('13')] +
             [html.Td(subject['GE'])] + 
             [html.Td(dataframe['GE_grade'],style=center)] + [html.Td(dataframe['GE_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )] +
         [html.Tr(
+            [html.Td('14')] +
             [html.Td(subject['PM'])] + 
             [html.Td(dataframe['PM_grade'],style=center)] + [html.Td(dataframe['PM_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )] +
         [html.Tr(
+            [html.Td('15')] +
             [html.Td(subject['ART'])] + 
             [html.Td(dataframe['ART_grade'],style=center)] + [html.Td(dataframe['ART_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
-            )]
+            )],className="widetable"
         )
