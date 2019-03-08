@@ -30,9 +30,9 @@ layout = html.Div(
                 html.H6("Behaviour/Affectiveness"),
                 html.Div(id='display-attitude'),
                 html.Hr(),
-                html.P('Date :')
+                html.P('Date :'),
                 html.Div(id='display-parents'),
-                html.Div(id='display-teacher')
+                html.Div(id='display-teacher'),
                 ],className="sheet padding-10mm")
         ]
     )
