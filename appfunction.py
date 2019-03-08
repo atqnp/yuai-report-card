@@ -162,7 +162,7 @@ def co_table(dataframe):
             [html.Td(dataframe['CC{}E'.format(num)],style=center)] +
             [html.Td(dataframe['CC{}AT'.format(num)],style=center)] +
             [html.Td(dataframe['CC{}G'.format(num)],style=center)]
-            ) for num in range(1,6)],className="widetable"
+            ) for num in range(1,6)]
             )
 
 def extra_table(dataframe):
@@ -180,7 +180,7 @@ def extra_table(dataframe):
             [html.Td(dataframe['extraCC{}E'.format(num)],style=center)] +
             [html.Td(dataframe['extraCC{}AT'.format(num)],style=center)] +
             [html.Td(dataframe['extraCC{}G'.format(num)],style=center)]
-            ) for num in range(1,4)],className="widetable"
+            ) for num in range(1,4)]
         )
 
 def co_comments(dataframe):
@@ -194,7 +194,7 @@ def co_comments(dataframe):
             [html.Td(num)] +
             [html.Td(dataframe['CC{}'.format(num)])] +
             [html.Td(dataframe['CC{}comment'.format(num)])]
-            ) for num in range(1,6)],className="widetable"
+            ) for num in range(1,6)]
         )
 
 def extra_comments(dataframe):
@@ -208,7 +208,7 @@ def extra_comments(dataframe):
             [html.Td(num)] +
             [html.Td(dataframe['extraCC{}'.format(num)])] +
             [html.Td(dataframe['extraCC{}comment'.format(num)])]
-            ) for num in range(1,4)],className="widetable"
+            ) for num in range(1,4)]
         )
 
 def attitude(dataframe):
@@ -410,7 +410,7 @@ def submit_attendance(dataframe):
 def academic_report(dataframe):
     return html.Table(
         #Header
-        [html.Tr([html.Th('No'),html.Th('Component', rowSpan='2'),html.Th('Cognitive',colSpan='2'),html.Th('Practical',colSpan='2')])] +
+        [html.Tr([html.Th('No', rowSpan='2'),html.Th('Component', rowSpan='2'),html.Th('Cognitive',colSpan='2'),html.Th('Practical',colSpan='2')])] +
         [html.Tr([html.Th('Grade'),html.Th('Marks'),html.Th('Grade'),html.Th('Marks')])] +
         [html.Tr([html.Td('Academics',colSpan='6')])] +
         #Body
@@ -503,5 +503,5 @@ def academic_report(dataframe):
             [html.Td(subject['ART'])] + 
             [html.Td(dataframe['ART_grade'],style=center)] + [html.Td(dataframe['ART_marks'],style=center)] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
-            )],className="widetable"
+            )]
         )
