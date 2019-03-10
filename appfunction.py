@@ -287,28 +287,28 @@ def submit_act_grades(dataframe,num,items):
 
         #Body
         [html.Tr(
-            [html.Td('Name')] + [html.Td(dataframe[items],style=center)] + 
-            [html.Td(html.Div(dcc.Input(id='input-act-component',type='text',placeholder='Input value here..')))]
+            [html.Td('Name')] + [html.Td(dataframe[items],style=center)] #+ 
+            #[html.Td(html.Div(dcc.Input(id='input-act-component',type='text',placeholder='Input value here..')))]
             )] +
         [html.Tr(
-            [html.Td('Attendance')] + [html.Td(dataframe[items + 'A'],style=center)] + 
-            [html.Td(html.Div(dcc.Input(id='input-act-attendance',type='text',placeholder='Input value here..')))]
+            [html.Td('Attendance')] + [html.Td(dataframe[items + 'A'],style=center)] #+ 
+            #[html.Td(html.Div(dcc.Input(id='input-act-attendance',type='text',placeholder='Input value here..')))]
             )] +
         [html.Tr(
-            [html.Td('Participation')] + [html.Td(dataframe[items + 'P'],style=center)] + 
-            [html.Td(html.Div(dcc.Input(id='input-act-participation',type='text',placeholder='Input value here..')))]
+            [html.Td('Participation')] + [html.Td(dataframe[items + 'P'],style=center)] #+ 
+            #[html.Td(html.Div(dcc.Input(id='input-act-participation',type='text',placeholder='Input value here..')))]
             )] +
         [html.Tr(
-            [html.Td('Effort')] + [html.Td(dataframe[items + 'E'],style=center)] + 
-            [html.Td(html.Div(dcc.Input(id='input-act-effort',type='text',placeholder='Input value here..')))]
+            [html.Td('Effort')] + [html.Td(dataframe[items + 'E'],style=center)] #+ 
+            #[html.Td(html.Div(dcc.Input(id='input-act-effort',type='text',placeholder='Input value here..')))]
             )] +
         [html.Tr(
-            [html.Td('Attitude')] + [html.Td(dataframe[items + 'AT'],style=center)] + 
-            [html.Td(html.Div(dcc.Input(id='input-act-attitude',type='text',placeholder='Input value here..')))]
+            [html.Td('Attitude')] + [html.Td(dataframe[items + 'AT'],style=center)] #+ 
+            #[html.Td(html.Div(dcc.Input(id='input-act-attitude',type='text',placeholder='Input value here..')))]
             )] +
         [html.Tr(
-            [html.Td('Grade')] + [html.Td(dataframe[items + 'G'],style=center)] + 
-            [html.Td(html.Div(dcc.Input(id='input-act-grade',type='text',placeholder='Input value here..')))]
+            [html.Td('Grade')] + [html.Td(dataframe[items + 'G'],style=center)] #+ 
+            #[html.Td(html.Div(dcc.Input(id='input-act-grade',type='text',placeholder='Input value here..')))]
             )] +
         [html.Tr(
             [html.Td(html.Div(html.Button('Submit',id='submit-actgrades')),colSpan='2')] +
@@ -331,16 +331,16 @@ def submit_act_comments(dataframe,num,items):
                 [html.Td(dataframe[items])] +
                 [html.Td(dataframe[items + 'comment'])]
             )
-        ] +
-        [html.Tr(
-                [html.Td(html.P("Notes/Comments to Submit",colSpan='2'))] +
-                [html.Td(html.Div(dcc.Textarea(id='input-act-comments',placeholder='Enter your notes/comments here..',style={'width': '100%'})))] 
-            )
-        ] +
-        [html.Tr(
-            [html.Td(html.Div(html.Button('Submit',id='submit-actcomments')))] +
-            [html.Td(html.Div(id='container-act-comments'))]
-            )]
+        ] #+
+#         [html.Tr(
+#                 [html.Td(html.P("Notes/Comments to Submit",colSpan='2'))] +
+#                 [html.Td(html.Div(dcc.Textarea(id='input-act-comments',placeholder='Enter your notes/comments here..',style={'width': '100%'})))] 
+#             )
+#         ] +
+#         [html.Tr(
+#             [html.Td(html.Div(html.Button('Submit',id='submit-actcomments')))] +
+#             [html.Td(html.Div(id='container-act-comments'))]
+#             )]
         )
 
 def submit_attitude(dataframe):
