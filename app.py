@@ -539,7 +539,7 @@ def submit_attitde(clicks, submit, name, val1, val2, val3, val4):
     sub_row = works.find(name).row
     works.update_cell(sub_row, works.find('School days').col, val1)
     works.update_cell(sub_row, works.find('Absence').col, val2)
-    works.update_cell(sub_row, works.find('Coming').col, val3)
+    works.update_cell(sub_row, works.find('Coming late').col, val3)
     works.update_cell(sub_row, works.find('Leaving early').col, val4)
     
 if __name__ == '__main__':
