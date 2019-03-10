@@ -379,11 +379,12 @@ def update_dropdown_activity(activity):
     Input('placeholder-dropdown','value'),
     Input('name-dropdown','value')])
 def act_grades_submit_table(act, pholder, name):  
-    dfi = df[df.Name.isin([name])] 
+    dfi = df[df.Name.isin([name])]
     if act == 'Co-Curricular':
-        return appfunction.submit_act_grades(dfi,pholder,items='CC{}'.format(pholder))
+        items='CC{}'.format(pholder)
     elif act == 'Extra-Curricular':
-        return appfunction.submit_act_grades(dfi,pholder,items='extraCC{}'.format(pholder))
+        items='extraCC{}'.format(pholder)
+    return appfunction.submit_act_grades(dfi,pholder,items)
 
 #submit3 - update cell (activity grades)
 @app.callback(
@@ -417,9 +418,10 @@ def submit_coextra_grades(clicks, submit, name, act, pholder, v_comp, v_attend, 
 def act_comments_submit_table(act, pholder, name):  
     dfi = df[df.Name.isin([name])] 
     if act == 'Co-Curricular':
-        return appfunction.submit_act_comments(dfi,pholder,items='CC{}'.format(pholder))
+        items='CC{}'.format(pholder)
     elif act == 'Extra-Curricular':
-        return appfunction.submit_act_comments(dfi,pholder,items='extraCC{}'.format(pholder))
+        items='CC{}'.format(pholder)
+    return appfunction.submit_act_comments(dfi,pholder,items)
 
 #submit4 - update cell (activity notes/comments)
 @app.callback(
