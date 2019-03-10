@@ -293,26 +293,26 @@ def submit_act_grades(dataframe,num,items):
             [html.Td(dataframe[items + 'E'],style=center)] +
             [html.Td(dataframe[items + 'AT'],style=center)] +
             [html.Td(dataframe[items + 'G'],style=center)] 
-            )] +
-        [html.Tr([html.Td('',colSpan='7')])] +
-        [html.Tr(html.Th(html.P('Changes/Input for submission'),colSpan='7'))] +
-        #Header - submit
-        [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
-        #Body - submit
-        [html.Tr(
-            [html.Td(num)] +
-            [html.Td(html.Div(dcc.Input(id='input-act-component',type='text',placeholder='Input value here..')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-attendance',type='text',placeholder='Input value here..')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-participation',type='text',placeholder='Input value here..')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-effort',type='text',placeholder='Input value here..')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-attitude',type='text',placeholder='Input value here..')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-grade',type='text',placeholder='Input value here..')))]
-            )] +
-        [html.Tr(
-            [html.Td(html.Div(html.Button('Submit',id='submit-actgrades')),colSpan='2')] +
-            [html.Td(html.Div(id='container-act-grades'))]
-        )],className='fulltable'
-        )
+            )] #+
+#         [html.Tr([html.Td('',colSpan='7')])] +
+#         [html.Tr(html.Th(html.P('Changes/Input for submission'),colSpan='7'))] +
+#         #Header - submit
+#         [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+#         #Body - submit
+#         [html.Tr(
+#             [html.Td(num)] +
+#             [html.Td(html.Div(dcc.Input(id='input-act-component',type='text',placeholder='Input value here..')))] +
+#             [html.Td(html.Div(dcc.Input(id='input-act-attendance',type='text',placeholder='Input value here..')))] +
+#             [html.Td(html.Div(dcc.Input(id='input-act-participation',type='text',placeholder='Input value here..')))] +
+#             [html.Td(html.Div(dcc.Input(id='input-act-effort',type='text',placeholder='Input value here..')))] +
+#             [html.Td(html.Div(dcc.Input(id='input-act-attitude',type='text',placeholder='Input value here..')))] +
+#             [html.Td(html.Div(dcc.Input(id='input-act-grade',type='text',placeholder='Input value here..')))]
+#             )] +
+#         [html.Tr(
+#             [html.Td(html.Div(html.Button('Submit',id='submit-actgrades')),colSpan='2')] +
+#             [html.Td(html.Div(id='container-act-grades'))]
+#         )],className='fulltable'
+         )
 
 def submit_act_comments(dataframe,num,items):
     """return table for notes/comments submission 
