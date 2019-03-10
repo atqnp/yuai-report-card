@@ -245,7 +245,7 @@ def submit_sub_marks(dataframe,subcode,grade,marks):
                 [html.Td(subject.get(subcode))] + 
                 [html.Td(dataframe[grade],style=center)] +
                 [html.Td(dataframe[marks],style=center)] +
-                [html.Td(html.Div(dcc.Input(id='input-marks',type='number')))] + 
+                [html.Td(html.Div(dcc.Input(id='input-marks',type='number',placeholder='Input value here..')))] + 
                 [html.Td(html.Div(html.Button('Submit',id='submit-marks')))] +
                 [html.Td(html.Div(id='container-marks'))]
                 )
@@ -301,17 +301,17 @@ def submit_act_grades(dataframe,num,items):
         #Body - submit
         [html.Tr(
             [html.Td(num)] +
-            [html.Td(html.Div(dcc.Input(id='input-act-component',type='text')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-attendance',type='text')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-participation',type='text')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-effort',type='text')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-attitude',type='text')))] +
-            [html.Td(html.Div(dcc.Input(id='input-act-grade',type='text')))]
+            [html.Td(html.Div(dcc.Input(id='input-act-component',type='text',placeholder='Input value here..')))] +
+            [html.Td(html.Div(dcc.Input(id='input-act-attendance',type='text',placeholder='Input value here..')))] +
+            [html.Td(html.Div(dcc.Input(id='input-act-participation',type='text',placeholder='Input value here..')))] +
+            [html.Td(html.Div(dcc.Input(id='input-act-effort',type='text',placeholder='Input value here..')))] +
+            [html.Td(html.Div(dcc.Input(id='input-act-attitude',type='text',placeholder='Input value here..')))] +
+            [html.Td(html.Div(dcc.Input(id='input-act-grade',type='text',placeholder='Input value here..')))]
             )] +
         [html.Tr(
             [html.Td(html.Div(html.Button('Submit',id='submit-actgrades')),colSpan='2')] +
             [html.Td(html.Div(id='container-act-grades'))]
-        )]
+        )],className='fulltable'
         )
 
 def submit_act_comments(dataframe,num,items):
