@@ -53,7 +53,7 @@ def access_wsheet(item):
     
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(credential,scope)
     file = gspread.authorize(credentials)
-    sheet = file.open("Copy of Semester 2 Report Card (data) 2018/2019")
+    sheet = file.open("Copy of Semester 3 Report Card (data) 2018/2019")
     wks = sheet.worksheet(access)
     return wks
 
