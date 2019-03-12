@@ -493,14 +493,14 @@ def academic_report(dataframe):
         [html.Tr(
             [html.Td('14')] +
             [html.Td(subject['PM'])] + 
-            [html.Td(dataframe['PM_grade'],style=center)] + [html.Td(dataframe['PM_marks'],style=center)] + 
-            [html.Td('-',style=center)] + [html.Td('-',style=center)]
+            [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
+            [html.Td(dataframe['PM_grade'],style=center)] + [html.Td(dataframe['PM_marks'],style=center)]
             )] +
         [html.Tr(
             [html.Td('15')] +
             [html.Td(subject['ART'])] + 
-            [html.Td(dataframe['ART_grade'],style=center)] + [html.Td(dataframe['ART_marks'],style=center)] + 
-            [html.Td('-',style=center)] + [html.Td('-',style=center)]
+            [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
+            [html.Td(dataframe['ART_grade'],style=center)] + [html.Td(dataframe['ART_marks'],style=center)]
             )]
         )
 
