@@ -156,7 +156,7 @@ def serve_layout():
             ])], className="no-print"),
         html.Div(id='tab-contents')
         ])
-åç
+
 executor = ThreadPoolExecutor(max_workers=1)
 executor.submit(get_new_update)
 
