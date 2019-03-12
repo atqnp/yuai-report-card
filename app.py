@@ -309,7 +309,7 @@ def display_table(name):
     [Input('name-dropdown','value')])
 def display_attitude(name):
     return html.Div([html.P('Homeroom Teacher:'),
-        html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
+        html.Br(), html.Br(),
         html.P('_________________')
         ])
 
@@ -319,7 +319,7 @@ def display_attitude(name):
     [Input('name-dropdown','value')])
 def display_attitude(name):
     return html.Div([html.P('Parent:'),
-        html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
+        html.Br(), html.Br(),
         html.P('_________________')
         ])
 
