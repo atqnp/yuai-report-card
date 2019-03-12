@@ -7,7 +7,6 @@ layout = html.Div(
             html.Section([
                 html.Div(id='display-student-info'),
                 html.Hr(),
-                html.H6('Academics Achievement'),
                 html.Div(id='display-report'),
                 ], className="sheet padding-10mm"),
             html.Section([
@@ -17,10 +16,12 @@ layout = html.Div(
             html.Section([
                 html.H6('Co-curricular Activities'),
                 html.Div(id='display-cc-grade'),
-                html.H6("Extra-curricular Activities"),
-                html.Div(id='display-ex-grade'),
                 html.H6("Co-curricular Activities - Teacher's Note"),
                 html.Div(id='display-cc-comments'),
+                ], className="sheet padding-10mm"),
+            html.Section([
+                html.H6("Extra-curricular Activities"),
+                html.Div(id='display-ex-grade'),
                 html.H6("Extra-curricular Activities - Teacher's Note"),
                 html.Div(id='display-ex-comments'),
                 ], className="sheet padding-10mm"),
