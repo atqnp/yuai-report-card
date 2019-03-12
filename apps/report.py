@@ -31,6 +31,7 @@ layout = html.Div(
                 html.Div(id='display-attendance'),
                 html.Hr(),
                 html.Div(id='display-range'),
+                html.Hr(),
                 html.P('Date :'),
                 html.Div(id='display-parents'),
                 html.Div(id='display-teacher')
