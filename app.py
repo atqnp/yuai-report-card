@@ -156,7 +156,7 @@ def serve_layout():
             ])], className="no-print"),
         html.Div(id='tab-contents')
         ])
-
+åç
 executor = ThreadPoolExecutor(max_workers=1)
 executor.submit(get_new_update)
 
@@ -295,6 +295,13 @@ def display_comments_ex(name):
 def display_attitude(name):
     dfi = df[df.Name.isin([name])]
     return appfunction.attitude(dfi)
+
+#full report page - grade table
+@app.callback(
+    Output('display-range','children'),
+    [Input('name-dropdown','value')])
+def display_table(name):
+    return appfunction.grade_range()
 
 #full report page - teacher
 @app.callback(
