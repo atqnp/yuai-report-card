@@ -503,3 +503,19 @@ def academic_report(dataframe):
             [html.Td('-',style=center)] + [html.Td('-',style=center)]
             )]
         )
+
+def grade_range():
+    return html.Table(
+        [html.Tr([html.Th('Range',style=center)] + [html.Th('Grade',style=center)]
+            )] +
+        [html.Tr([html.Td('80 - 100',style=center)] + [html.Td('A',style=center)]
+            )] +
+        [html.Tr([html.Td('70 - 79',style=center)] + [html.Td('B',style=center)]
+            )] +
+        [html.Tr([html.Td('60 - 69',style=center)] + [html.Td('C',style=center)]
+            )] +
+        [html.Tr([html.Td('50 - 59',style=center)] + [html.Td('D',style=center)]
+            )] +
+        [html.Tr([html.Td('0 - 49',style=center)] + [html.Td('F',style=center)]
+            )],className="narrowtable"
+        )
