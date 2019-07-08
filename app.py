@@ -46,7 +46,7 @@ def get_data():
     #updates the data
     global df, wks
     file = gspread.authorize(credentials)
-    sheet = file.open("Copy of Semester 3 Report Card (data) 2018/2019")
+    sheet = file.open("YUAI Report Card (data)")
     wks = sheet.worksheet("master")
     df = pd.DataFrame(wks.get_all_records())
 
