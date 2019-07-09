@@ -62,7 +62,7 @@ fy.START_DATE = 1
 year_now = fy.FiscalDate.today().fiscal_year
 
 #List of students
-select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,10))}
+select_opt = {'Primary' : list(range(1,7)), 'Secondary' : list(range(7,11))}
 select_level = list(select_opt.keys())
 select_sem = ['{}/{}/{}'.format(num,year_now,year_now+1) for num in range(1,4)]
 
