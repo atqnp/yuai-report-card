@@ -347,6 +347,7 @@ def submit_marks(clicks, submit, name, subcode, value):
     sub_row = works.find(name).row
     sub_col = works.find((subject.get(subcode)).upper()).col
     works.update_cell(sub_row,sub_col,value)
+    return html.P('You have input the marks for:'), html.P('{} Item/Subject: {} Value: {}'.format(name,subcode,value))
 
 #submit2 - selected subject for submitting (comments table output)
 @app.callback(
@@ -371,6 +372,7 @@ def submit_comments(clicks, submit, name, subcode, value):
     sub_row = works.find(name).row
     sub_col = works.find((subject.get(subcode)).upper()).col
     works.update_cell(sub_row,sub_col,value)
+    return html.P('You have input the notes for:'), html.P('{} Item/Subject: {}'.format(name,subcode))
 
 #submit3 and 4 - selection of items for submitting (activity level)
 @app.callback(
@@ -415,6 +417,7 @@ def submit_coextra_grades(clicks, submit, name, act, pholder, v_comp, v_attend, 
     works.update_cell(sub_row, works.find('{} {} (Effort)'.format(act,pholder)).col, v_eff)
     works.update_cell(sub_row, works.find('{} {} (Attitude)'.format(act,pholder)).col, v_att)
     works.update_cell(sub_row, works.find('{} {} (Grade)'.format(act,pholder)).col, v_grade)
+    return html.P('You have input the items for:'), html.P('{}'.format(name))
 
 #submit4 - selected item for submitting (comments table output)
 @app.callback(
@@ -447,6 +450,7 @@ def submit_coextra_comments(clicks, submit, name, act, pholder, value):
     sub_row = works.find(name).row
     sub_col = works.find('{} {} (Comments)'.format(act,pholder)).col
     works.update_cell(sub_row,sub_col,value)
+    return html.P('You have input the items for:'), html.P('{}'.format(name))
 
 #submit5 - selected name for submitting (comments table output)
 @app.callback(
@@ -472,6 +476,7 @@ def submit_attitude(clicks, submit, name, val1, val2, val3, val4, val5):
     works.update_cell(sub_row, works.find('Diligent').col, val3)
     works.update_cell(sub_row, works.find('Interaction').col, val4)
     works.update_cell(sub_row, works.find('Respect').col, val5)
+    return html.P('You have input the items for:'), html.P('{}'.format(name))
 
 #submit6 - selection
 @app.callback(
@@ -548,6 +553,7 @@ def submit_attitde(clicks, submit, name, val1, val2, val3, val4):
     works.update_cell(sub_row, works.find('Absence').col, val2)
     works.update_cell(sub_row, works.find('Coming late').col, val3)
     works.update_cell(sub_row, works.find('Leaving early').col, val4)
+    return html.P('You have input the items for:'), html.P('{}'.format(name))
     
 if __name__ == '__main__':
     app.run_server(debug=True)
