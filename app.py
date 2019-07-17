@@ -81,6 +81,7 @@ subject = {'TJ':'Tajweed',
             'SS':'Social Study',
             'GE':'Geography',
             'PM':'Public Moral',
+            'BS':'Business Studies',
             'ART':'Art'}
 
 #List of co and extra curricular
