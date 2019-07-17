@@ -23,6 +23,7 @@ subject = {'TJ':'Tajweed',
             'SS':'Social Study',
             'GE':'Geography',
             'PM':'Public Moral',
+            'BS':'Business Studies',
             'ART':'Art'}
 
 sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
@@ -161,6 +162,7 @@ def co_table(dataframe):
             [html.Td(dataframe['CC{}P'.format(num)],style=center)] +
             [html.Td(dataframe['CC{}E'.format(num)],style=center)] +
             [html.Td(dataframe['CC{}AT'.format(num)],style=center)] +
+            [html.Td(dataframe['CC{}PR'.format(num)],style=center)] +                    
             [html.Td(dataframe['CC{}G'.format(num)],style=center)]
             ) for num in range(1,6)], className="fulltable"
             )
@@ -179,6 +181,7 @@ def extra_table(dataframe):
             [html.Td(dataframe['extraCC{}P'.format(num)],style=center)] +
             [html.Td(dataframe['extraCC{}E'.format(num)],style=center)] +
             [html.Td(dataframe['extraCC{}AT'.format(num)],style=center)] +
+            [html.Td(dataframe['extraCC{}PR'.format(num)],style=center)] +                   
             [html.Td(dataframe['extraCC{}G'.format(num)],style=center)]
             ) for num in range(1,4)], className="fulltable"
         )
@@ -498,6 +501,12 @@ def academic_report(dataframe):
             )] +
         [html.Tr(
             [html.Td('15')] +
+            [html.Td(subject['BS'])] + 
+            [html.Td(dataframe['BS_grade'],style=center)] + [html.Td(dataframe['BS_marks'],style=center)] + 
+            [html.Td('-',style=center)] + [html.Td('-',style=center)]
+            )] +
+        [html.Tr(
+            [html.Td('16')] +
             [html.Td(subject['ART'])] + 
             [html.Td('-',style=center)] + [html.Td('-',style=center)] + 
             [html.Td(dataframe['ART_grade'],style=center)] + [html.Td(dataframe['ART_marks'],style=center)]
