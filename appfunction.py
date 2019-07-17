@@ -152,7 +152,7 @@ def co_table(dataframe):
     """return table for co-curricular activities (grades) of a student"""
     return html.Table(
         #Header
-        [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+        [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Progress','Grade']])] +
 
         #Body
         [html.Tr(
@@ -171,7 +171,7 @@ def extra_table(dataframe):
     """return table for extra-curricular activities (grades) of a student"""
     return html.Table(
         #Header
-        [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Grade']])] +
+        [html.Tr([html.Th(col) for col in ['No','Component','Attendance','Participation','Effort','Attitude','Progress','Grade']])] +
 
         #Body
         [html.Tr(
