@@ -146,7 +146,7 @@ def serve_layout():
                     ], className="no-print sheet padding-10mm"),
                     html.Br(),       
         dcc.Tabs(id='tabs-id', value='tab-report',children=[
-            #dcc.Tab(label='Full Report', value='tab-report'),
+            dcc.Tab(label='Full Report', value='tab-report'),
             #dcc.Tab(label='Submit Marks and Grade (Academics)', value='tab-submit1'),
             #dcc.Tab(label='Submit Notes (Academics)', value='tab-submit2'),
             #dcc.Tab(label='Submit Co-curricular and Extra-curricular (Grade)', value='tab-submit3'),
