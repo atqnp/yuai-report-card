@@ -233,7 +233,8 @@ def attendance(dataframe,period):
         [html.Tr([html.Td('School days')] + [html.Td(dataframe['School days'],style=center)])] +
         [html.Tr([html.Td('Absence')] + [html.Td(dataframe['Absence'],style=center)])] +
         [html.Tr([html.Td('Coming late')] + [html.Td(dataframe['Coming late'],style=center)])] +
-        [html.Tr([html.Td('Leaving early')] + [html.Td(dataframe['Leaving early'],style=center)])],
+        [html.Tr([html.Td('Leaving early')] + [html.Td(dataframe['Leaving early'],style=center)])] +                
+        [html.Tr([html.Td('Grade')] + [html.Td(dataframe['Grade'],style=center)])],
         className="widetable"
         )
 
