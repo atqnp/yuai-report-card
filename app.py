@@ -319,7 +319,11 @@ def display_attitude(name):
     Output('display-parents','children'),
     [Input('name-dropdown','value')])
 def display_attitude(name):
-    return html.Div([html.P('Parent:'),
+    return html.Div([html.P('Parents:'),
+        html.Br(), html.Br(),
+        html.P('_________________'),
+        html.Br(),
+        html.P('Headmistress : Yetti Dalimi'),
         html.Br(), html.Br(),
         html.P('_________________')
         ])
