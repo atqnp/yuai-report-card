@@ -216,7 +216,7 @@ def comments(dataframe):
         #Header
         [html.Tr([html.Th("Teacher's Comment")])] +
         #Body
-        [html.Tr([html.Td(dataframe['full_comments'])])], className="fulltable"
+        [html.Tr([html.Td(dataframe['Full_comments'])])], className="fulltable"
         )
 
 
