@@ -202,7 +202,7 @@ def attendance(dataframe,period):
         #Header
         [html.Tr([html.Th(col) for col in ['MONTH',period,'GRADE']])] +
         #Body
-        [html.Tr([html.Td('School days')] + [html.Td(dataframe['School days'],style=center)] + [html.Td(dataframe['Grade'],style=center,rowSpan='3')])] +
+        [html.Tr([html.Td('School days')] + [html.Td(dataframe['School days'],style=center)] + [html.Td(dataframe['Grade'],style=center,rowSpan='4')])] +
         [html.Tr([html.Td('Absence')] + [html.Td(dataframe['Absence'],style=center)])] +
         [html.Tr([html.Td('Coming late')] + [html.Td(dataframe['Coming late'],style=center)])] +
         [html.Tr([html.Td('Leaving early')] + [html.Td(dataframe['Leaving early'],style=center)])],
