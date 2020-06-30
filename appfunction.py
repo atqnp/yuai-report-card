@@ -26,9 +26,11 @@ subject = {'TJ':'Tajweed',
             'BS':'Business Studies',
             'ART':'Art'}
 
+
 sub_grade = ['{}_grade'.format(sub) for sub in subject.keys()]
 sub_marks = ['{}_marks'.format(sub) for sub in subject.keys()]
 sub_com = ['{}_comments'.format(sub) for sub in subject.keys()]
+
 
 def access_wsheet(item):
     """accessing worksheet based on item(input)"""
@@ -96,6 +98,7 @@ def grades_table(dataframe):
     ]
     )
 
+
 def notes_table(dataframe):
     """return table for notes/comments of a student"""
     return html.Table(
@@ -110,6 +113,7 @@ def notes_table(dataframe):
         ) for no,sub,comments in zip(list(range(1,len(sub_com)+1)),subject.values(),sub_com)
     ],className="fulltable"
     )
+
 
 def co_table(dataframe):
     """return table for co-curricular activities (grades) of a student"""
@@ -130,6 +134,7 @@ def co_table(dataframe):
             ) for num in range(1,6)], className="fulltable"
             )
 
+
 def extra_table(dataframe):
     """return table for extra-curricular activities (grades) of a student"""
     return html.Table(
@@ -149,6 +154,7 @@ def extra_table(dataframe):
             ) for num in range(1,4)], className="fulltable"
         )
 
+
 def co_notes(dataframe):
     """return table for co-curricular activities (notes/comments) of a student"""
     return html.Table(
@@ -162,6 +168,7 @@ def co_notes(dataframe):
             [html.Td([html.P(value) for index, value in dataframe['CC{}comment'.format(num)].str.split('\n',expand=True).items()])]
             ) for num in range(1,6)], className="fulltable"
         )
+
 
 def extra_notes(dataframe):
     """return table for extra-curricular activities (notes/comments) of a student"""
@@ -177,6 +184,7 @@ def extra_notes(dataframe):
             ) for num in range(1,4)], className="fulltable"
         )
 
+
 def attitude(dataframe):
     """return table for attitude grades of a student"""
     attlist = ['Akhlaq','Discipline','Diligent','Interaction','Respect']
@@ -186,6 +194,7 @@ def attitude(dataframe):
             [html.Td(no,style=center)] + [html.Td(att,style=center)] + [html.Td(dataframe[att],style=center)]
             ) for no,att in zip(list(range(1,len(attlist)+1)),attlist)],className="narrowtable"
         )
+
 
 def attendance(dataframe,period):
     """return table for attendance"""
@@ -207,7 +216,7 @@ def comments(dataframe):
         #Header
         [html.Tr([html.Th("Teacher's Comment")])] +
         #Body
-        [html.Tr([html.Td(dataframe['Comment'])])], className="fulltable"
+        [html.Tr([html.Td(dataframe['full_comments'])])], className="fulltable"
         )
 
 
