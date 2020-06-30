@@ -2,6 +2,13 @@
 
 Report card application for YUAI International Islamic School
 
+ver 1.5.0 (2020-06-30)
+--------------------
+- remove submit function
+- update to python 3.7.7
+- add teacher's comment section
+- changes to layout
+
 ver 1.4.2 (2019-03-09)
 --------------------
 - bug fixes
