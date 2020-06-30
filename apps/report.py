@@ -11,19 +11,19 @@ layout = html.Div(
                 ], className="sheet padding-10mm"),
             html.Section([
                 html.H6("Academics Achievement - Teacher's Note"),
-                html.Div(id='display-comments'),
+                html.Div(id='display-notes'),
                 ], className="sheet padding-10mm"),
             html.Section([
                 html.H6('Co-curricular Activities'),
                 html.Div(id='display-cc-grade'),
                 html.H6("Co-curricular Activities - Teacher's Note"),
-                html.Div(id='display-cc-comments'),
+                html.Div(id='display-cc-notes'),
                 ], className="sheet padding-10mm"),
             html.Section([
                 html.H6("Extra-curricular Activities"),
                 html.Div(id='display-ex-grade'),
                 html.H6("Extra-curricular Activities - Teacher's Note"),
-                html.Div(id='display-ex-comments'),
+                html.Div(id='display-ex-notes'),
                 ], className="sheet padding-10mm"),
             html.Section([
                 html.H6("Behaviour/Affectiveness"),
@@ -31,11 +31,16 @@ layout = html.Div(
                 html.Hr(),
                 html.Div(id='display-attendance'),
                 html.Hr(),
-                html.Div(id='display-range'),
+                html.Div(id='display-comments'),
                 html.Hr(),
                 html.P('Date :'),
                 html.Div(id='display-parents'),
                 html.Div(id='display-teacher')
+                ],className="sheet padding-10mm"),
+            html.Section([
+                html.Hr(),
+                html.Div(id='display-range'),
+                html.Hr()
                 ],className="sheet padding-10mm")
         ]
     )
