@@ -188,16 +188,15 @@ def attitude(dataframe):
         )
 
 def attendance(dataframe,period):
-    '''return table for attendance'''
+    """return table for attendance"""
     return html.Table(
         #Header
-        [html.Tr([html.Th(col) for col in ['MONTH',period]])] +
+        [html.Tr([html.Th(col) for col in ['MONTH',period,'GRADE']])] +
         #Body
-        [html.Tr([html.Td('School days')] + [html.Td(dataframe['School days'],style=center)])] +
+        [html.Tr([html.Td('School days')] + [html.Td(dataframe['School days'],style=center)] + [html.Td(dataframe['Grade'],style=center,rowSpan='3')])] +
         [html.Tr([html.Td('Absence')] + [html.Td(dataframe['Absence'],style=center)])] +
         [html.Tr([html.Td('Coming late')] + [html.Td(dataframe['Coming late'],style=center)])] +
-        [html.Tr([html.Td('Leaving early')] + [html.Td(dataframe['Leaving early'],style=center)])] +                
-        [html.Tr([html.Td('Grade')] + [html.Td(dataframe['Grade'],style=center)])],
+        [html.Tr([html.Td('Leaving early')] + [html.Td(dataframe['Leaving early'],style=center)])],
         className="widetable"
         )
 
@@ -210,6 +209,7 @@ def comments(dataframe):
         #Body
         [html.Tr([html.Td(dataframe['Comment'])])], className="fulltable"
         )
+
 
 def academic_report(dataframe):
     return html.Table(
