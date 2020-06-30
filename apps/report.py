@@ -31,16 +31,14 @@ layout = html.Div(
                 html.Hr(),
                 html.Div(id='display-attendance'),
                 html.Hr(),
-                html.Div(id='display-comments'),
+                html.Div(id='display-comments')
+                ],className="sheet padding-10mm"),
+            html.Section([
+                html.Div(id='display-range'),
                 html.Hr(),
                 html.P('Date :'),
                 html.Div(id='display-parents'),
                 html.Div(id='display-teacher')
-                ],className="sheet padding-10mm"),
-            html.Section([
-                html.Hr(),
-                html.Div(id='display-range'),
-                html.Hr()
                 ],className="sheet padding-10mm")
         ]
     )
